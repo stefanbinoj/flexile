@@ -1,0 +1,23 @@
+- Always use the latest version of TypeScript, React, and Next.js
+- Sentence case headers and buttons and stuff, not title case
+- Always write ALL of the code
+- Don't add ANY new comments to the code
+- Don't apologize for errors, fix them
+
+- To add a feature:
+  - Add page to `apps/next/app/**/page.tsx`
+  - Add any components to `apps/next/components/**/*.tsx`
+  - Add tRPC API routes to `apps/next/trpc/routes/**/index.ts` and then add those to `apps/next/trpc/server.ts`
+  - Create API handlers using tRPC API routes that follow REST principles
+
+- For writing end-to-end tests:
+  - Use Playwright tests in `e2e/**/*.spec.ts`
+  - If migrating from rspec, delete the rspec tests
+  - Factories can be created using the rspec factories in `spec/factories` in the `/e2e/factories` folder
+  - For any broken locators / assertions, you can use the playwright extension to record tests or pick locators
+
+- For writing front-end code:
+  - Do not use `React.FC`. Use the following syntax: `const Component = ({ prop1, prop2 }: { prop1: string; prop2: number }) => { ... }`
+
+- Tech debt:
+  - Add a `TODO (techdebt)` comment to document refactors that should be made in the future

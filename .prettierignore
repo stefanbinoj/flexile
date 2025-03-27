@@ -1,0 +1,5 @@
+apps/next/utils/routes.*
+apps/rails
+vendor
+tmp
+apps/next/.next
