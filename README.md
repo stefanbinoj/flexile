@@ -3,18 +3,18 @@
 [![CI](https://github.com/antiwork/flexile/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/antiwork/flexile/actions/workflows/ci.yml?query=branch%3Amain)
 [![License: Flexile Community License](https://img.shields.io/badge/License-Flexile%20Community-blue.svg)](https://github.com/antiwork/flexile/blob/main/LICENSE.md)
 
-Flexile is a comprehensive platform for payroll and equity management designed to help companies find, onboard, and pay qualified remote contractors. It enables businesses to streamline the entire contractor lifecycle from onboarding with legally binding contracts to processing payments and managing equity compensation.
+Payroll & equity for everyone.
 
 ## Features
 
-- Onboard contractors with legally binding contracts using digital document signing
-- Manage regular and one-off invoice submissions
-- Process payments through various methods
-- Track and distribute equity as part of compensation
-- Manage team updates and absences
-- Handle tax compliance information
-- Integrate with financial systems like QuickBooks
-- Create and maintain cap tables and equity calculations
+- Onboard contractors and employees with custom docs
+- Manage regular and one-off invoices
+- Process payments globally
+- Offer and distribute equity as part of compensation
+- Track team performance, updates and absences
+- Handle tax compliance
+- Integrate with other tools like QuickBooks Online
+- Manage your cap table and send company updates to investors
 
 ## Table of Contents
 
