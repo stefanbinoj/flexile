@@ -105,7 +105,7 @@ export default function HomePage() {
             <br />
             equity for
             <br />
-            everybody
+            everyone
           </h1>
           <div className="flex">
             <Link
