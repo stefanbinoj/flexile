@@ -4,9 +4,11 @@ import { companyAdministratorsFactory } from "@test/factories/companyAdministrat
 import { companyRolesFactory } from "@test/factories/companyRoles";
 import { usersFactory } from "@test/factories/users";
 import { login } from "@test/helpers/auth";
+import { mockDocuseal as mockDocusealHelper } from "@test/helpers/docuseal";
 import { expect, type Page, test, withinModal, withIsolatedBrowserSessionPage } from "@test/index";
-import { eq } from "drizzle-orm";
-import { companies, users } from "@/db/schema";
+import { desc, eq } from "drizzle-orm";
+import type { NextFixture } from "next/experimental/testmode/playwright";
+import { companies, companyContractors, users } from "@/db/schema";
 import { assertDefined } from "@/utils/assert";
 
 test.describe("New Contractor", () => {
@@ -67,21 +69,49 @@ test.describe("New Contractor", () => {
     await page.getByLabel("Rate").fill(projectBased ? "1000" : salaryBased ? "120000" : "99");
   };
 
-  test("allows inviting a contractor", async ({ page, browser }) => {
+  const getCreatedContractor = async () => {
+    const contractor = assertDefined(
+      await db.query.companyContractors.findFirst({
+        with: { user: true },
+        where: eq(companyContractors.companyId, company.id),
+        orderBy: desc(companyContractors.createdAt),
+      }),
+    );
+    return contractor;
+  };
+
+  const mockDocuseal = (next: NextFixture, companyValues: Record<string, unknown>) =>
+    mockDocusealHelper(next, {
+      submitters: async () => ({ "Company Representative": user, Signer: (await getCreatedContractor()).user }),
+      validateValues: async (role, values) => {
+        if (role === "Company Representative") {
+          return expect(values).toMatchObject(companyValues);
+        }
+        const contractor = await getCreatedContractor();
+        return expect(values).toMatchObject({
+          __signerEmail: contractor.user.email,
+          __signerName: contractor.user.legalName,
+        });
+      },
+    });
+
+  test("allows inviting a contractor", async ({ page, browser, next }) => {
+    const { mockForm } = mockDocuseal(next, {
+      __payRate: "99 per hour",
+      __role: "Hourly Role 1",
+      __targetAnnualHours: "Target Annual Hours: 1,100",
+      __maximumFee:
+        'Maximum fee payable to Contractor on this Project Assignment, including all items in the first two paragraphs above is $152,460 (the "Maximum Fee").',
+    });
     await fillForm(page, {});
 
+    await mockForm(page);
     await page.getByRole("button", { name: "Send invite" }).click();
     await withinModal(
       async (modal) => {
-        await expect(modal.getByText("Hourly Role 1").first()).toBeVisible();
-        await expect(modal.getByText("99 per hour")).toBeVisible();
-        await expect(modal.getByText("Target annual hours")).toBeVisible();
-        await expect(modal.getByText("Maximum fee payable")).toBeVisible();
         await modal.getByRole("button", { name: "Sign now" }).click();
         await modal.getByRole("link", { name: "Type" }).click();
         await modal.getByPlaceholder("Type signature here...").fill("Admin Admin");
-        await modal.getByRole("button", { name: "Next" }).click();
-        await expect(modal.getByPlaceholder("Type here...")).toHaveValue("Chief Executive Officer");
         await modal.getByRole("button", { name: "Complete" }).click();
       },
       { page },
@@ -96,17 +126,13 @@ test.describe("New Contractor", () => {
 
     await withIsolatedBrowserSessionPage(
       async (isolatedPage) => {
+        await mockForm(isolatedPage);
         const { user } = await usersFactory.create({ id: assertDefined(deletedUser).id });
         await login(isolatedPage, user);
         await isolatedPage.getByRole("link", { name: "Review & sign" }).click();
-        await expect(isolatedPage.getByText("Hourly role 1").first()).toBeVisible();
-        await expect(isolatedPage.getByText(user.email, { exact: true }).first()).toBeVisible();
-        await expect(isolatedPage.getByText(user.legalName ?? "").first()).toBeVisible();
         await isolatedPage.getByRole("button", { name: "Sign now" }).click();
         await isolatedPage.getByRole("link", { name: "Type" }).click();
         await isolatedPage.getByPlaceholder("Type signature here...").fill("Flexy Bob");
-        await isolatedPage.getByRole("button", { name: "Next" }).click();
-        await isolatedPage.getByPlaceholder("Type here...").fill("50");
         await isolatedPage.getByRole("button", { name: "Complete" }).click();
         await expect(isolatedPage.getByRole("heading", { name: "Invoicing" })).toBeVisible();
       },
@@ -114,21 +140,22 @@ test.describe("New Contractor", () => {
     );
   });
 
-  test("allows inviting a project-based contractor", async ({ page, browser }) => {
+  test("allows inviting a project-based contractor", async ({ page, browser, next }) => {
+    const { mockForm } = mockDocuseal(next, {
+      __payRate: "1,000 per project",
+      __role: "Project-based Role",
+      __targetAnnualHours: "",
+      __maximumFee: "",
+    });
+    await mockForm(page);
     await fillForm(page, { projectBased: true });
 
     await page.getByRole("button", { name: "Send invite" }).click();
     await withinModal(
       async (modal) => {
-        await expect(modal.getByText("Project-based Role").first()).toBeVisible();
-        await expect(modal.getByText("1,000 per project")).toBeVisible();
-        await expect(modal.getByText("Target annual hours")).not.toBeVisible();
-        await expect(modal.getByText("Maximum fee payable")).not.toBeVisible();
         await modal.getByRole("button", { name: "Sign now" }).click();
         await modal.getByRole("link", { name: "Type" }).click();
         await modal.getByPlaceholder("Type signature here...").fill("Admin Admin");
-        await modal.getByRole("button", { name: "Next" }).click();
-        await expect(modal.getByPlaceholder("Type here...")).toHaveValue("Chief Executive Officer");
         await modal.getByRole("button", { name: "Complete" }).click();
       },
       { page },
@@ -143,18 +170,13 @@ test.describe("New Contractor", () => {
 
     await withIsolatedBrowserSessionPage(
       async (isolatedPage) => {
+        await mockForm(isolatedPage);
         const { user } = await usersFactory.create({ id: assertDefined(deletedUser).id });
         await login(isolatedPage, user);
         await isolatedPage.getByRole("link", { name: "Review & sign" }).click();
-        await expect(isolatedPage.getByText("Project-based Role").first()).toBeVisible();
-        await expect(isolatedPage.getByText("1,000 per project")).toBeVisible();
-        await expect(isolatedPage.getByText(user.email, { exact: true }).first()).toBeVisible();
-        await expect(isolatedPage.getByText(user.legalName ?? "").first()).toBeVisible();
         await isolatedPage.getByRole("button", { name: "Sign now" }).click();
         await isolatedPage.getByRole("link", { name: "Type" }).click();
         await isolatedPage.getByPlaceholder("Type signature here...").fill("Flexy Bob");
-        await isolatedPage.getByRole("button", { name: "Next" }).click();
-        await isolatedPage.getByPlaceholder("Type here...").fill("50");
         await isolatedPage.getByRole("button", { name: "Complete" }).click();
         await expect(isolatedPage.getByRole("heading", { name: "Invoicing" })).toBeVisible();
       },
