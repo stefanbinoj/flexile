@@ -150,11 +150,24 @@ export default function AdminList() {
       {data.invoices.length > 0 && (
         <div className="grid gap-4">
           {!company.completedPaymentMethodSetup && (
-            <Alert variant="critical">
+            <Alert variant="destructive">
               <ExclamationTriangleIcon />
               <AlertDescription>
                 <strong>Bank account setup incomplete.</strong> We're waiting for your bank details to be confirmed.
                 Once done, you'll be able to start approving invoices and paying contractors.
+              </AlertDescription>
+            </Alert>
+          )}
+          
+          {company.completedPaymentMethodSetup && !company.isTrusted && (
+            <Alert variant="destructive">
+              <ExclamationTriangleIcon />
+              <AlertDescription>
+                <strong>Payments to contractors may take up to 10 business days to process.</strong>{" "}
+                <span>
+                  Email us at <Link href="mailto:support@flexile.com">support@flexile.com</Link> to complete additional
+                  verification steps.
+                </span>
               </AlertDescription>
             </Alert>
           )}
@@ -183,19 +196,6 @@ export default function AdminList() {
           <Table table={table} onRowClicked={setDetailInvoice} />
           <PaginationSection total={data.total} perPage={perPage} />
         </div>
-      )}
-
-      {!company.isTrusted && data.invoices.length > 0 && (
-        <Alert variant="critical">
-          <ExclamationTriangleIcon />
-          <AlertDescription>
-            <strong>Payments to contractors may take up to 10 business days to process.</strong>{" "}
-            <span>
-              Email us at <Link href="mailto:support@flexile.com">support@flexile.com</Link> to complete additional
-              verification steps.
-            </span>
-          </AlertDescription>
-        </Alert>
       )}
 
       {data.invoices.length === 0 && <Placeholder icon={CheckCircleIcon}>No invoices to display.</Placeholder>}
