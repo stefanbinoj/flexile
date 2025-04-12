@@ -1,7 +1,7 @@
 import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";
 import MutationButton from "@/components/MutationButton";

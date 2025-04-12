@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import Input from "@/components/Input";
 import { linkClasses } from "@/components/Link";
 import { useCurrentCompany } from "@/global";

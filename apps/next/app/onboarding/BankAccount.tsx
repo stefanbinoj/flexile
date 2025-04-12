@@ -6,7 +6,7 @@ import { useState } from "react";
 import { z } from "zod";
 import BankAccountModal from "@/app/settings/payouts/BankAccountModal";
 import type { BankAccount } from "@/app/settings/payouts/BankAccountModal";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import OnboardingLayout from "@/components/layouts/Onboarding";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/Tooltip";

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { stripeMerchantCategoryCodes } from "@/app/companies/[companyId]/expenses";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import MainLayout from "@/components/layouts/Main";
 import Modal from "@/components/Modal";
 import MutationButton from "@/components/MutationButton";

@@ -4,7 +4,7 @@ import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useQueryState } from "nuqs";
 import React, { useEffect, useMemo, useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import Modal from "@/components/Modal";
 import Status from "@/components/Status";
 import Table, { createColumnHelper, useTable } from "@/components/Table";

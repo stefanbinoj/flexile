@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { startOfWeek } from "date-fns";
 import { List, Map } from "immutable";
 import { useEffect, useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";
 import MutationButton from "@/components/MutationButton";

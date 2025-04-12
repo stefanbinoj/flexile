@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Check, X } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import MainLayout from "@/components/layouts/Main";
 import { linkClasses } from "@/components/Link";

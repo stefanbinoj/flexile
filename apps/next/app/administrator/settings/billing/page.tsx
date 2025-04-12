@@ -2,7 +2,7 @@
 
 import { ArrowDownTrayIcon, ArrowPathIcon, CurrencyDollarIcon } from "@heroicons/react/16/solid";
 import { DocumentCurrencyDollarIcon } from "@heroicons/react/24/solid";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import Placeholder from "@/components/Placeholder";
 import Status from "@/components/Status";
 import Table, { createColumnHelper, useTable } from "@/components/Table";

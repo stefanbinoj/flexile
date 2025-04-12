@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import EquityPercentageLockModal from "@/app/invoices/EquityPercentageLockModal";
 import { StatusWithTooltip } from "@/app/invoices/Status";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import DecimalInput from "@/components/DecimalInput";
 import DurationInput from "@/components/DurationInput";

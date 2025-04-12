@@ -10,7 +10,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { z } from "zod";
 import EquityPercentageLockModal from "@/app/invoices/EquityPercentageLockModal";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import DecimalInput from "@/components/DecimalInput";
 import DurationInput from "@/components/DurationInput";

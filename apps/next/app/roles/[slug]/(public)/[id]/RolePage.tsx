@@ -9,7 +9,7 @@ import Link from "next/link";
 import { notFound, useParams } from "next/navigation";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import Input from "@/components/Input";
 import SimpleLayout from "@/components/layouts/Simple";

@@ -1,7 +1,7 @@
 "use client";
 import { BriefcaseIcon, LinkIcon } from "@heroicons/react/24/outline";
 import React, { useMemo, useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import CopyButton from "@/components/CopyButton";
 import MainLayout from "@/components/layouts/Main";
 import Placeholder from "@/components/Placeholder";

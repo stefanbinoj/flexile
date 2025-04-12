@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { CardRow } from "@/components/Card";
 import MutationButton from "@/components/MutationButton";
 import Status from "@/components/Status";

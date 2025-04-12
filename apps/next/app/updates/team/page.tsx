@@ -7,7 +7,7 @@ import Link from "next/link";
 import { parseAsString, useQueryState } from "nuqs";
 import React, { useState } from "react";
 import CompanyWorkerUpdate from "@/app/updates/team/CompanyWorkerUpdate";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import MainLayout from "@/components/layouts/Main";
 import Placeholder from "@/components/Placeholder";
 import { useCurrentCompany, useCurrentUser } from "@/global";

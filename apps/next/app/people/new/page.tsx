@@ -7,7 +7,7 @@ import { parseAsInteger, useQueryState } from "nuqs";
 import React, { useEffect, useState } from "react";
 import TemplateSelector from "@/app/document_templates/TemplateSelector";
 import RoleSelector from "@/app/roles/Selector";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { CardRow } from "@/components/Card";
 import DecimalInput from "@/components/DecimalInput";
 import FormSection from "@/components/FormSection";

@@ -3,7 +3,7 @@ import { CheckCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import CardLink from "@/components/CardLink";
 import MainLayout from "@/components/layouts/Main";
 import Modal from "@/components/Modal";

@@ -3,7 +3,7 @@ import { Decimal } from "decimal.js";
 import { useState } from "react";
 import { z } from "zod";
 import DocusealForm from "@/app/documents/DocusealForm";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import Delta from "@/components/Delta";
 import Modal from "@/components/Modal";

@@ -2,7 +2,7 @@
 import { Mail } from "lucide-react";
 import { useParams } from "next/navigation";
 import React from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import MainLayout from "@/components/layouts/Main";
 import RichText from "@/components/RichText";

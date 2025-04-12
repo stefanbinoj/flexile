@@ -7,7 +7,7 @@ import { Decimal } from "decimal.js";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import Figures from "@/components/Figures";
 import { linkClasses } from "@/components/Link";
 import MutationButton from "@/components/MutationButton";
@@ -238,23 +238,20 @@ const InvestorGrantList = () => {
 
               {exerciseInProgress ? (
                 <Alert className="mb-4 w-full">
-                  <InformationCircleIcon />
-                  <AlertDescription>
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold">
-                        We're awaiting a payment of {formatMoneyFromCents(exerciseInProgress.totalCostCents)} to
-                        exercise {exerciseInProgress.numberOfOptions.toLocaleString()} options.
-                      </span>
-                      <MutationButton
-                        small
-                        mutation={resendPaymentInstructions}
-                        param={exerciseInProgress.id}
-                        successText="Payment instructions sent!"
-                      >
-                        Resend payment instructions
-                      </MutationButton>
-                    </div>
-                  </AlertDescription>
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold">
+                      We're awaiting a payment of {formatMoneyFromCents(exerciseInProgress.totalCostCents)} to exercise{" "}
+                      {exerciseInProgress.numberOfOptions.toLocaleString()} options.
+                    </span>
+                    <MutationButton
+                      size="sm"
+                      mutation={resendPaymentInstructions}
+                      param={exerciseInProgress.id}
+                      successText="Payment instructions sent!"
+                    >
+                      Resend payment instructions
+                    </MutationButton>
+                  </div>
                 </Alert>
               ) : null}
             </>

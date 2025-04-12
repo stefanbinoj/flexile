@@ -8,7 +8,7 @@ import { CalendarClockIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import AbsencesModal from "@/app/updates/team/AbsencesModal";
 import { Task, TaskInput } from "@/app/updates/team/Task";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card } from "@/components/Card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useCurrentCompany } from "@/global";

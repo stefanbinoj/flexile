@@ -3,7 +3,7 @@ import { InformationCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useMutation } from "@tanstack/react-query";
 import { pick } from "lodash-es";
 import { useEffect, useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import Delta from "@/components/Delta";
 import Input from "@/components/Input";

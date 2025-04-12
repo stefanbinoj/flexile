@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Set } from "immutable";
 import { Check, ChevronsUpDown, User, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { CardRow } from "@/components/Card";
 import DecimalInput from "@/components/DecimalInput";
 import FormSection from "@/components/FormSection";

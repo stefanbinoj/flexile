@@ -3,7 +3,7 @@ import { Map as ImmutableMap } from "immutable";
 import { set } from "lodash-es";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { z } from "zod";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import ComboBox from "@/components/ComboBox";
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";

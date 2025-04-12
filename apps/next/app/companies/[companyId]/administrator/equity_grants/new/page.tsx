@@ -7,7 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { z } from "zod";
 import TemplateSelector from "@/app/document_templates/TemplateSelector";
 import { optionGrantTypeDisplayNames, relationshipDisplayNames, vestingTriggerDisplayNames } from "@/app/equity/grants";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { CardRow } from "@/components/Card";
 import FormSection from "@/components/FormSection";
 import Input from "@/components/Input";

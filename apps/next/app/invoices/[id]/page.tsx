@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import MainLayout from "@/components/layouts/Main";
 import { linkClasses } from "@/components/Link";

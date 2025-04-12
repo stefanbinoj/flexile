@@ -3,7 +3,7 @@ import { UserPlusIcon, UsersIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import React, { useMemo } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import MainLayout from "@/components/layouts/Main";
 import PaginationSection, { usePage } from "@/components/PaginationSection";
 import Placeholder from "@/components/Placeholder";

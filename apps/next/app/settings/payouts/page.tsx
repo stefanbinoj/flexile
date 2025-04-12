@@ -5,7 +5,7 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Check } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { z } from "zod";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { CardRow } from "@/components/Card";
 import FormSection from "@/components/FormSection";
 import Input from "@/components/Input";

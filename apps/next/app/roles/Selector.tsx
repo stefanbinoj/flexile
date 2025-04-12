@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import Select from "@/components/Select";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";

@@ -15,7 +15,7 @@ import {
 } from "@/app/invoices/index";
 import { StatusNotice, StatusWithTooltip } from "@/app/invoices/Status";
 import { Task } from "@/app/updates/team/Task";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import MainLayout from "@/components/layouts/Main";
 import Modal from "@/components/Modal";

@@ -1,51 +1,60 @@
+import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import React from "react";
-import { linkClasses } from "@/components/Link";
+import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/utils";
 
-const Button = ({
-  children,
-  className,
-  variant,
-  small,
-  asChild,
-  ...props
-}: {
-  variant?: "primary" | "critical" | "success" | "outline" | "dashed" | "link" | undefined;
-  small?: boolean | undefined;
-  asChild?: boolean | undefined;
-} & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
-  const classes = (() => {
-    if (variant === "link") return linkClasses;
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-full border text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "bg-black text-white border-black hover:bg-blue-600 hover:border-blue-600",
+        primary: "bg-blue-600 text-white border-blue-600 hover:bg-black hover:border-black",
+        critical: "bg-red text-white border-red",
+        success: "bg-green text-white border-green",
+        outline: "bg-transparent text-inherit border-current hover:text-blue-600",
+        dashed: "bg-transparent text-inherit border-dashed border-current hover:text-blue-600",
+        link: "inline-flex cursor-pointer items-center gap-1 border-none underline hover:text-blue-600 disabled:opacity-50 [&[inert]]:opacity-50 disabled:pointer-events-none",
+        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+      },
+      size: {
+        default: "h-auto px-4 py-2",
+        sm: "h-auto px-4 py-1",
+        lg: "h-auto px-8 py-3",
+        icon: "h-9 w-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  },
+);
 
-    let classes =
-      "inline-flex items-center justify-center px-4 border rounded-full gap-1.5 whitespace-nowrap cursor-pointer disabled:opacity-50 [&[inert]]:opacity-50 disabled:pointer-events-none";
-    classes += small ? " py-1" : " py-2";
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  small?: boolean;
+}
 
-    if (variant) {
-      switch (variant) {
-        case "primary":
-          return `${classes} bg-blue-600 text-white border-blue-600 hover:bg-black hover:border-black`;
-        case "critical":
-          return `${classes} bg-red text-white border-red`;
-        case "success":
-          return `${classes} bg-green text-white border-green`;
-        case "outline":
-          return `${classes} bg-transparent text-inherit border-current hover:text-blue-600`;
-        case "dashed":
-          return `${classes} bg-transparent text-inherit border-dashed border-current hover:text-blue-600`;
-      }
-    } else {
-      return `${classes} bg-black text-white border-black hover:bg-blue-600 hover:border-blue-600`;
-    }
-  })();
-  const Comp = asChild ? Slot : "button";
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size: sizeProp, small, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
 
-  return (
-    <Comp type="button" {...props} className={cn(classes, className)}>
-      {children}
-    </Comp>
-  );
-};
+    const size = sizeProp ?? (small ? "sm" : "default");
 
-export default Button;
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+        type={props.type || "button"}
+      />
+    );
+  },
+);
+Button.displayName = "Button";
+
+export { Button, buttonVariants };

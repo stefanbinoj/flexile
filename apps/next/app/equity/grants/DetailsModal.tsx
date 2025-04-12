@@ -2,7 +2,7 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { isFuture } from "date-fns";
 import Decimal from "decimal.js";
 import React from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import { linkClasses } from "@/components/Link";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/Tooltip";

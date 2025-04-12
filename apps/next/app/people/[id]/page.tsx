@@ -23,7 +23,7 @@ import InvoiceStatus from "@/app/invoices/Status";
 import RoleSelector from "@/app/roles/Selector";
 import { formatAbsencesForUpdate } from "@/app/updates/team/CompanyWorkerUpdate";
 import { Task as CompanyWorkerTask } from "@/app/updates/team/Task";
-import Button from "@/components/Button";
+import { Button } from "@/components/Button";
 import { Card, CardRow } from "@/components/Card";
 import DecimalInput from "@/components/DecimalInput";
 import FormSection from "@/components/FormSection";
@@ -582,7 +582,7 @@ const DetailsTab = ({
         {!contractor.endedAt && (
           <CardRow>
             <MutationButton
-              small
+              size="sm"
               mutation={updateContractor}
               param={{
                 companyId: company.id,
@@ -845,7 +845,7 @@ function ExercisesTab({ investorId }: { investorId: string }) {
         id: "actions",
         cell: (info) =>
           info.row.original.status === "signed" ? (
-            <MutationButton mutation={confirmPaymentMutation} param={info.row.original.id} small>
+            <MutationButton mutation={confirmPaymentMutation} param={info.row.original.id} size="sm">
               Confirm payment
             </MutationButton>
           ) : undefined,
