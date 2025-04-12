@@ -9,7 +9,7 @@ type MutationConfigProps<T> = {
   successText?: React.ReactNode;
   errorText?: React.ReactNode;
   idleVariant?: ButtonProps["variant"];
-} & (T extends void ? { param?: T } : { param: T }); // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- this is valid
+} & (T extends void ? { param?: T } : { param: T });
 
 type MutationButtonProps<T> = MutationConfigProps<T> &
   Omit<ButtonProps, "variant" | "disabled" | "onClick" | "children" | "tw" | "small"> & {

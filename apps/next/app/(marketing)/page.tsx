@@ -20,7 +20,6 @@ import testimonialKarin from "./testimonial-karin.jpg";
 import testimonialSahil from "./testimonial-sahil.jpg";
 import testimonialSid from "./testimonial-sid.jpg";
 
-//todo-button-7
 const buttonClasses = "flex justify-center items-center rounded-full transition-all duration-400 no-underline";
 
 const Section = ({ children, className }: { children: ReactNode; className?: string }) => (
