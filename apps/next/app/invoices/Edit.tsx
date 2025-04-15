@@ -11,12 +11,12 @@ import { useMemo, useRef, useState } from "react";
 import { z } from "zod";
 import EquityPercentageLockModal from "@/app/invoices/EquityPercentageLockModal";
 import { Card, CardRow } from "@/components/Card";
+import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import DecimalInput from "@/components/DecimalInput";
 import DurationInput from "@/components/DurationInput";
 import Input from "@/components/Input";
 import MainLayout from "@/components/layouts/Main";
 import Select from "@/components/Select";
-import Table, { createColumnHelper, useTable } from "@/components/Table";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useCurrentCompany } from "@/global";
@@ -507,8 +507,8 @@ const Edit = () => {
             </div>
           </div>
 
-          <Table table={invoiceTable} />
-          {canManageExpenses ? <Table table={expenseTable} /> : null}
+          <DataTable table={invoiceTable} />
+          {canManageExpenses ? <DataTable table={expenseTable} /> : null}
 
           <footer className="flex flex-col gap-3 lg:flex-row lg:justify-between">
             <Input

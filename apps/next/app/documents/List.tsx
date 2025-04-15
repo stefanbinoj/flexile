@@ -4,9 +4,9 @@ import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useQueryState } from "nuqs";
 import React, { useEffect, useMemo, useState } from "react";
+import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Modal from "@/components/Modal";
 import Status from "@/components/Status";
-import Table, { createColumnHelper, useTable } from "@/components/Table";
 import { Button } from "@/components/ui/button";
 import { useCurrentCompany, useCurrentUser } from "@/global";
 import type { RouterOutput } from "@/trpc";
@@ -129,7 +129,7 @@ const List = ({ userId, documents }: { userId: string | null; documents: Documen
 
   return (
     <>
-      <Table table={table} />
+      <DataTable table={table} />
       {signDocument ? <SignDocumentModal document={signDocument} onClose={() => setSignDocumentId(null)} /> : null}
     </>
   );

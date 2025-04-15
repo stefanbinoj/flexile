@@ -7,11 +7,11 @@ import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Card, CardRow } from "@/components/Card";
+import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import MainLayout from "@/components/layouts/Main";
 import { linkClasses } from "@/components/Link";
 import Modal from "@/components/Modal";
 import MutationButton from "@/components/MutationButton";
-import Table, { createColumnHelper, useTable } from "@/components/Table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -246,7 +246,7 @@ export default function InvoicePage() {
               </div>
             </div>
 
-            {invoice.lineItems.length > 0 ? <Table table={table} /> : null}
+            {invoice.lineItems.length > 0 ? <DataTable table={table} /> : null}
 
             {invoice.expenses.length > 0 && (
               <Card>
