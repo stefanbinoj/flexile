@@ -1,11 +1,20 @@
 import docuseal from "@docuseal/api";
 import { TRPCError } from "@trpc/server";
-import { and, desc, eq, inArray, isNotNull, isNull, not, type SQLWrapper } from "drizzle-orm";
+import { and, desc, eq, inArray, isNotNull, isNull, not, sql, type SQLWrapper } from "drizzle-orm";
 import { pick } from "lodash-es";
 import { z } from "zod";
 import { byExternalId, db } from "@/db";
-import { activeStorageAttachments, activeStorageBlobs, documents, documentSignatures, users } from "@/db/schema";
+import { DocumentType } from "@/db/enums";
+import {
+  activeStorageAttachments,
+  activeStorageBlobs,
+  boardConsents,
+  documents,
+  documentSignatures,
+  users,
+} from "@/db/schema";
 import env from "@/env";
+import { inngest } from "@/inngest/client";
 import { companyProcedure, createRouter, getS3Url } from "@/trpc";
 import { simpleUser } from "@/trpc/routes/users";
 import { assertDefined } from "@/utils/assert";
@@ -37,13 +46,15 @@ export const documentsRouter = createRouter({
       const rows = await db
         .select({
           ...pick(documents, "id", "name", "createdAt", "docusealSubmissionId", "type"),
+          lawyerApproved: sql<boolean>`${boardConsents.lawyerApprovedAt} IS NOT NULL`,
         })
         .from(documents)
         .innerJoin(documentSignatures, eq(documents.id, documentSignatures.documentId))
         .innerJoin(users, eq(documentSignatures.userId, users.id))
+        .leftJoin(boardConsents, eq(documents.id, boardConsents.documentId))
         .where(where)
         .orderBy(desc(documents.createdAt))
-        .groupBy(documents.id);
+        .groupBy(documents.id, boardConsents.lawyerApprovedAt);
 
       const signatories = await db.query.documentSignatures.findMany({
         columns: { documentId: true, title: true, signedAt: true },
@@ -74,8 +85,9 @@ export const documentsRouter = createRouter({
           attachmentRows.map(async (attachment) => [attachment.recordId, await getUrl(attachment.blob)] as const),
         ),
       );
+
       return rows.map((document) => ({
-        ...pick(document, "id", "name", "createdAt", "docusealSubmissionId", "type"),
+        ...pick(document, "id", "name", "createdAt", "docusealSubmissionId", "type", "lawyerApproved"),
         attachment: attachments.get(document.id),
         signatories: signatories
           .filter((signature) => signature.documentId === document.id)
@@ -116,36 +128,106 @@ export const documentsRouter = createRouter({
     return assertDefined(submission.documents[0]).url;
   }),
   // TODO set up a DocuSeal webhook instead
-  sign: companyProcedure
-    .input(z.object({ id: z.bigint(), role: z.enum(["Company Representative", "Signer"]) }))
-    .mutation(async ({ ctx, input }) => {
-      if (input.role === "Company Representative" && !ctx.companyAdministrator && !ctx.companyLawyer)
-        throw new TRPCError({ code: "FORBIDDEN" });
-      const [document] = await db
-        .select()
-        .from(documents)
-        .innerJoin(documentSignatures, eq(documents.id, documentSignatures.documentId))
-        .where(
-          and(
-            eq(documents.id, input.id),
-            visibleDocuments(ctx.company.id, input.role === "Company Representative" ? undefined : ctx.user.id),
-            eq(documentSignatures.title, input.role),
-            isNull(documentSignatures.signedAt),
+  sign: companyProcedure.input(z.object({ id: z.bigint(), role: z.string() })).mutation(async ({ ctx, input }) => {
+    if (
+      (input.role === "Company Representative" || input.role === "Board member") &&
+      !ctx.companyAdministrator &&
+      !ctx.companyLawyer
+    )
+      throw new TRPCError({ code: "FORBIDDEN" });
+    const [document] = await db
+      .select()
+      .from(documents)
+      .innerJoin(documentSignatures, eq(documents.id, documentSignatures.documentId))
+      .where(
+        and(
+          eq(documents.id, input.id),
+          visibleDocuments(
+            ctx.company.id,
+            input.role === "Company Representative" || input.role === "Board member" ? undefined : ctx.user.id,
           ),
-        )
-        .limit(1);
-      if (!document) throw new TRPCError({ code: "NOT_FOUND" });
+          eq(documentSignatures.title, input.role),
+          isNull(documentSignatures.signedAt),
+        ),
+      )
+      .limit(1);
+    if (!document) throw new TRPCError({ code: "NOT_FOUND" });
 
-      await db
-        .update(documentSignatures)
-        .set({ signedAt: new Date() })
-        .where(
-          and(
-            eq(documentSignatures.documentId, input.id),
-            isNull(documentSignatures.signedAt),
-            eq(documentSignatures.title, input.role),
-          ),
-        );
-    }),
+    await db
+      .update(documentSignatures)
+      .set({ signedAt: new Date() })
+      .where(
+        and(
+          eq(documentSignatures.documentId, input.id),
+          isNull(documentSignatures.signedAt),
+          eq(documentSignatures.title, input.role),
+        ),
+      );
+
+    // Check if all signatures for this document have been signed
+    const allSignatures = await db.select().from(documentSignatures).where(eq(documentSignatures.documentId, input.id));
+    const allSigned = allSignatures.every((signature) => signature.signedAt !== null);
+
+    return { documentId: input.id, complete: allSigned };
+  }),
+  approveByLawyer: companyProcedure.input(z.object({ id: z.bigint() })).mutation(async ({ ctx, input }) => {
+    if (!ctx.companyLawyer) throw new TRPCError({ code: "FORBIDDEN" });
+
+    const document = await db.query.documents.findFirst({
+      where: and(eq(documents.id, input.id), eq(documents.companyId, ctx.company.id)),
+      with: { boardConsents: true, signatures: true },
+    });
+    if (!document) throw new TRPCError({ code: "NOT_FOUND" });
+    if (document.type !== DocumentType.BoardConsent) throw new TRPCError({ code: "BAD_REQUEST" });
+
+    const boardConsent = document.boardConsents.find((consent) => consent.status === "pending");
+    if (!boardConsent) throw new TRPCError({ code: "BAD_REQUEST" });
+
+    await db
+      .update(boardConsents)
+      .set({
+        status: "lawyer_approved",
+        lawyerApprovedAt: new Date(),
+      })
+      .where(eq(boardConsents.id, boardConsent.id));
+
+    await inngest.send({
+      name: "board-consent.lawyer-approved",
+      data: {
+        boardConsentId: String(boardConsent.id),
+        documentId: String(document.id),
+        companyId: String(document.companyId),
+      },
+    });
+  }),
+  approveByMember: companyProcedure.input(z.object({ id: z.bigint() })).mutation(async ({ ctx, input }) => {
+    if (!ctx.companyAdministrator) throw new TRPCError({ code: "FORBIDDEN" });
+
+    const document = await db.query.documents.findFirst({
+      where: and(eq(documents.id, input.id), eq(documents.companyId, ctx.company.id)),
+      with: { boardConsents: true, signatures: true },
+    });
+
+    if (!document) throw new TRPCError({ code: "NOT_FOUND" });
+    if (document.type !== DocumentType.BoardConsent) return null;
+
+    const boardConsent = document.boardConsents.find((consent) => consent.status === "lawyer_approved");
+    if (!boardConsent) throw new TRPCError({ code: "BAD_REQUEST" });
+
+    await db
+      .update(boardConsents)
+      .set({
+        status: "board_approved",
+        boardApprovedAt: new Date(),
+      })
+      .where(eq(boardConsents.id, boardConsent.id));
+
+    await inngest.send({
+      name: "board-consent.member-approved",
+      data: {
+        boardConsentId: String(boardConsent.id),
+      },
+    });
+  }),
   templates: templatesRouter,
 });
