@@ -6,7 +6,7 @@ import CopyButton from "@/components/CopyButton";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { linkClasses } from "@/components/Link";
 import Placeholder from "@/components/Placeholder";
-import Sheet from "@/components/Sheet";
+import { Sheet, SheetContent, SheetFooter, SheetTitle } from "@/components/ui/sheet";
 import { useCurrentCompany, useCurrentUser } from "@/global";
 import {
   fetchInvestorEmail,
@@ -175,8 +175,16 @@ export default function CapTable() {
     <EquityLayout
       footer={
         selectedInvestors.length > 0 && (
-          <Sheet primary actions={<CopyButton copyText={selectedInvestorEmails}>Contact selected</CopyButton>}>
-            <b>{selectedInvestors.length} selected</b>
+          <Sheet>
+            <SheetContent side="bottom" className="relative w-full">
+              <SheetFooter>
+                <div className="flex flex-row items-center justify-between">
+                  <SheetTitle>{selectedInvestors.length} selected</SheetTitle>
+
+                  <CopyButton copyText={selectedInvestorEmails}>Contact selected</CopyButton>
+                </div>
+              </SheetFooter>
+            </SheetContent>
           </Sheet>
         )
       }

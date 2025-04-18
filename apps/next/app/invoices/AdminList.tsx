@@ -21,13 +21,13 @@ import Modal from "@/components/Modal";
 import MutationButton from "@/components/MutationButton";
 import PaginationSection, { usePage } from "@/components/PaginationSection";
 import Placeholder from "@/components/Placeholder";
-import Sheet from "@/components/Sheet";
 import Tabs from "@/components/Tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent, SheetFooter, SheetTitle } from "@/components/ui/sheet";
 import { useCurrentCompany } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
@@ -121,20 +121,22 @@ export default function AdminList() {
       footer={
         invoiceFilter === "actionable" &&
         selectedInvoices.length > 0 && (
-          <Sheet
-            primary
-            actions={
-              <>
-                <Button disabled={!company.completedPaymentMethodSetup} onClick={() => setOpenModal("approve")}>
-                  Approve selected
-                </Button>
-                <Button variant="outline" onClick={() => setOpenModal("reject")}>
-                  Reject selected
-                </Button>
-              </>
-            }
-          >
-            <b>{selectedInvoices.length} selected</b>
+          <Sheet>
+            <SheetContent side="bottom" className="relative w-full">
+              <SheetFooter>
+                <div className="flex flex-row items-center justify-between">
+                  <SheetTitle>{selectedInvoices.length} selected</SheetTitle>
+                  <div className="flex flex-row flex-wrap gap-3 sm:flex-row-reverse">
+                    <Button disabled={!company.completedPaymentMethodSetup} onClick={() => setOpenModal("approve")}>
+                      Approve selected
+                    </Button>
+                    <Button variant="outline" onClick={() => setOpenModal("reject")}>
+                      Reject selected
+                    </Button>
+                  </div>
+                </div>
+              </SheetFooter>
+            </SheetContent>
           </Sheet>
         )
       }
