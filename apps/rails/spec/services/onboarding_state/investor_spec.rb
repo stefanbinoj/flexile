@@ -54,27 +54,6 @@ RSpec.describe OnboardingState::Investor do
 
       expect(service.complete?).to eq(false)
     end
-
-    it "returns false if the bank account is missing" do
-      user.bank_accounts.destroy_all
-
-      expect(service.complete?).to eq(false)
-    end
-
-    it "returns true if the bank account is missing but the user is from a sanctioned country" do
-      user.bank_accounts.destroy_all
-      user.update!(country_code: "CU")
-
-      expect(service.complete?).to eq(true)
-    end
-
-    it "returns true if the bank account is missing but the user is from a restricted payout country and has a wallet address" do
-      user.bank_accounts.destroy_all
-      user.create_wallet(wallet_address: "0x1234f5ea0ba39494ce839613fffba74279579268")
-      user.update!(country_code: "NG")
-
-      expect(service.complete?).to eq(true)
-    end
   end
 
   describe "#redirect_path" do
@@ -82,34 +61,6 @@ RSpec.describe OnboardingState::Investor do
       allow(service).to receive(:has_personal_details?).and_return(false)
 
       expect(service.redirect_path).to eq(spa_company_investor_onboarding_path(company.external_id))
-    end
-
-    it "returns the path to the bank account page if the user is missing bank details" do
-      user.bank_accounts.destroy_all
-
-      expect(service.redirect_path).to eq(spa_company_investor_onboarding_bank_account_path(company.external_id))
-    end
-
-    it "returns the path to the bank account page if the user is from a restricted payout country and is missing a wallet address" do
-      user.bank_accounts.destroy_all
-      user.update!(country_code: "NG")
-
-      expect(service.redirect_path).to eq(spa_company_investor_onboarding_bank_account_path(company.external_id))
-    end
-
-    it "returns nil if the user is missing bank details and is from a sanctioned country" do
-      user.bank_accounts.destroy_all
-      user.update!(country_code: "CU")
-
-      expect(service.redirect_path).to be_nil
-    end
-
-    it "returns nil if the user is from a restricted payout country and has a wallet address" do
-      user.bank_accounts.destroy_all
-      user.create_wallet(wallet_address: "0x1234f5ea0ba39494ce839613fffba74279579268")
-      user.update!(country_code: "NG")
-
-      expect(service.redirect_path).to be_nil
     end
 
     it "returns nil if all onboarding data is present" do

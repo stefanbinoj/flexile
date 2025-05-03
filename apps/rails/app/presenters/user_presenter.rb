@@ -146,6 +146,7 @@ class UserPresenter
       preferredName: preferred_name,
       billingEntityName: billing_entity_name,
       roles:,
+      hasPayoutMethod: user.bank_account.present? || user.wallet.present?,
       address: {
         street_address: user.street_address,
         city: user.city,

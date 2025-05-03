@@ -70,7 +70,7 @@ RSpec.describe PayAllDividendsJob do
           .not_to change { InvestorDividendsPaymentJob.jobs.size }
       end
 
-      it "skips investors who haven't completed onboarding" do
+      it "skips investors who don't have a bank account" do
         company1_investor.user.bank_accounts.destroy_all
 
         expect { described_class.new.perform }

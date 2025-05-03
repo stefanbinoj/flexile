@@ -21,7 +21,7 @@ class OnboardingState::BaseUser
   end
 
   def complete?
-    has_personal_details? && has_payout_details?
+    has_personal_details?
   end
 
   def redirect_path
@@ -34,14 +34,4 @@ class OnboardingState::BaseUser
 
   private
     attr_reader :user, :company
-
-    def has_bank_details?
-      return @_has_bank_details if defined?(@_has_bank_details)
-
-      @_has_bank_details = user.bank_account.present?
-    end
-
-    def has_payout_details?
-      has_bank_details? || user.sanctioned_country_resident?
-    end
 end

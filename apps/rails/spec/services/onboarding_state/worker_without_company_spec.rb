@@ -13,25 +13,8 @@ RSpec.describe OnboardingState::WorkerWithoutCompany do
       expect(service.redirect_path).to eq(spa_onboarding_path)
     end
 
-    it "returns the path to the bank account page if the user is missing bank details" do
-      allow(service).to receive(:has_personal_details?).and_return(true)
-      allow(service).to receive(:has_bank_details?).and_return(false)
-      allow(user).to receive(:sanctioned_country_resident?).and_return(false)
-
-      expect(service.redirect_path).to eq(spa_onboarding_bank_account_path)
-    end
-
     it "returns nil if all onboarding data is present" do
       allow(service).to receive(:has_personal_details?).and_return(true)
-      allow(service).to receive(:has_bank_details?).and_return(true)
-
-      expect(service.redirect_path).to be_nil
-    end
-
-    it "returns nil if the user is from a sanctioned country and has all other details" do
-      allow(service).to receive(:has_personal_details?).and_return(true)
-      allow(service).to receive(:has_bank_details?).and_return(false)
-      allow(user).to receive(:sanctioned_country_resident?).and_return(true)
 
       expect(service.redirect_path).to be_nil
     end
