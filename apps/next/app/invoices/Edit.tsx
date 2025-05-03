@@ -30,13 +30,11 @@ import {
   edit_company_invoice_path,
   new_company_invoice_path,
 } from "@/utils/routes";
-import { LegacyAddress as Address } from ".";
+import { LegacyAddress as Address, useCanSubmitInvoices } from ".";
 import { Card, CardContent } from "@/components/ui/card";
 import { MAX_EQUITY_PERCENTAGE } from "@/models";
 import RangeInput from "@/components/RangeInput";
-
 import { EquityAllocationStatus } from "@/db/enums";
-import { useCanSubmitInvoices } from "@/app/invoices/ViewList";
 
 const addressSchema = z.object({
   street_address: z.string(),
@@ -314,7 +312,7 @@ const Edit = () => {
                   max={MAX_EQUITY_PERCENTAGE}
                   ariaLabel="Cash vs equity split"
                   unit="%"
-                  label={<div className="flex justify-between gap-2">Confirm your equity split for {invoiceYear}</div>}
+                  label={`Confirm your equity split for ${invoiceYear}`}
                 />
               </div>
               <p className="mt-4">
