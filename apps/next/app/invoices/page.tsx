@@ -279,7 +279,8 @@ export default function InvoicesPage() {
                               data
                                 .filter(
                                   (invoice) =>
-                                    invoice.equityAllocationStatus === EquityAllocationStatus.PendingGrantCreation,
+                                    invoice.equityAllocationStatus === EquityAllocationStatus.PendingGrantCreation &&
+                                    !invoice.paidAt,
                                 )
                                 .map((invoice) => invoice.billFrom),
                             ),
