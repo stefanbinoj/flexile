@@ -266,7 +266,8 @@ export default function InvoicesPage() {
                 )}
 
                 {data.some(
-                  (invoice) => invoice.equityAllocationStatus === EquityAllocationStatus.PendingGrantCreation,
+                  (invoice) =>
+                    invoice.equityAllocationStatus === EquityAllocationStatus.PendingGrantCreation && !invoice.paidAt,
                 ) && (
                   <Alert variant="destructive">
                     <ExclamationTriangleIcon />
