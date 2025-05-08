@@ -656,7 +656,7 @@ const QuickInvoicesSection = () => {
                           max={MAX_EQUITY_PERCENTAGE}
                           unit="%"
                           disabled={!canSubmitInvoices || !!equityAllocation?.locked}
-                          ariaLabel="Cash vs equity split"
+                          aria-label="Cash vs equity split"
                         />
                       </FormControl>
                     </FormItem>
