@@ -1,4 +1,4 @@
-import c from "../../rails/config/countries.json";
+import c from "../../backend/config/countries.json";
 
 export const CURRENCIES = [
   { name: "USD (United States Dollar)", value: "USD" },

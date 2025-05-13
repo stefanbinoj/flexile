@@ -14,5 +14,5 @@ JsRoutes.setup do |config|
   # effectively turns off js-routes's model parsing
   config.special_options_key = "toString"
   config.exclude = [/^rails_/]
-  config.file = Rails.root.join("..", "next", "utils", "routes.js").to_s
+  config.file = Rails.root.join("..", "frontend", "utils", "routes.js").to_s
 end
