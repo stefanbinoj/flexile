@@ -24,6 +24,7 @@ import { UserPlus, Users } from "lucide-react";
 import TemplateSelector from "@/app/document_templates/TemplateSelector";
 import FormFields from "./FormFields";
 import { DEFAULT_WORKING_HOURS_PER_WEEK } from "@/models";
+import { Switch } from "@/components/ui/switch";
 
 const schema = z.object({
   email: z.string().email(),
@@ -32,6 +33,7 @@ const schema = z.object({
   hoursPerWeek: z.number().nullable(),
   role: z.string(),
   startDate: z.string(),
+  contractSignedElsewhere: z.boolean().default(false),
 });
 
 export default function PeoplePage() {
@@ -48,6 +50,7 @@ export default function PeoplePage() {
       payRateType: lastContractor?.payRateType ?? PayRateType.Hourly,
       hoursPerWeek: lastContractor?.hoursPerWeek ?? DEFAULT_WORKING_HOURS_PER_WEEK,
       startDate: formatISO(new Date(), { representation: "date" }),
+      contractSignedElsewhere: false,
     },
     resolver: zodResolver(schema),
   });
@@ -69,6 +72,7 @@ export default function PeoplePage() {
       ...values,
       startedAt: formatISO(new Date(`${values.startDate}T00:00:00`)),
       documentTemplateId: templateId ?? "",
+      contractSignedElsewhere: values.contractSignedElsewhere,
     });
   });
 
@@ -185,12 +189,30 @@ export default function PeoplePage() {
 
               <FormFields />
 
-              <TemplateSelector
-                selected={templateId}
-                setSelected={setTemplateId}
-                companyId={company.id}
-                type={DocumentTemplateType.ConsultingContract}
+              <FormField
+                control={form.control}
+                name="contractSignedElsewhere"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        label="Already signed contract elsewhere"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
               />
+
+              {!form.watch("contractSignedElsewhere") && (
+                <TemplateSelector
+                  selected={templateId}
+                  setSelected={setTemplateId}
+                  companyId={company.id}
+                  type={DocumentTemplateType.ConsultingContract}
+                />
+              )}
               <div className="flex flex-col items-end space-y-2">
                 <MutationStatusButton mutation={saveMutation} type="submit">
                   Send invite
