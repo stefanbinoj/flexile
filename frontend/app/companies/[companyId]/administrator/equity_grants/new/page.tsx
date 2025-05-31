@@ -13,11 +13,17 @@ import { MutationStatusButton } from "@/components/MutationButton";
 import NumberInput from "@/components/NumberInput";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { optionGrantIssueDateRelationships, optionGrantTypes, optionGrantVestingTriggers } from "@/db/enums";
+import {
+  DocumentTemplateType,
+  optionGrantIssueDateRelationships,
+  optionGrantTypes,
+  optionGrantVestingTriggers,
+} from "@/db/enums";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";
-import { assertDefined } from "@/utils/assert";
+import TemplateSelector from "@/app/document_templates/TemplateSelector";
+import DatePicker from "@/components/DatePicker";
+import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 
 const MAX_VESTING_DURATION_IN_MONTHS = 120;
 
@@ -30,7 +36,7 @@ const formSchema = z.object({
   optionExpiryMonths: z.number().min(0),
   vestingTrigger: z.enum(optionGrantVestingTriggers),
   vestingScheduleId: z.string().nullish(),
-  vestingCommencementDate: z.string().nullish(),
+  vestingCommencementDate: z.instanceof(CalendarDate),
   totalVestingDurationMonths: z.number().nullish(),
   cliffDurationMonths: z.number().nullish(),
   vestingFrequencyMonths: z.string().nullish(),
@@ -40,6 +46,8 @@ const formSchema = z.object({
   deathExerciseMonths: z.number().min(0),
   disabilityExerciseMonths: z.number().min(0),
   retirementExerciseMonths: z.number().min(0),
+  boardApprovalDate: z.instanceof(CalendarDate, { message: "This field is required." }),
+  docusealTemplateId: z.string(),
 });
 const refinedSchema = formSchema.refine(
   (data) => data.optionGrantType !== "iso" || ["employee", "founder"].includes(data.issueDateRelationship),
@@ -52,7 +60,6 @@ const refinedSchema = formSchema.refine(
 type FormValues = z.infer<typeof formSchema>;
 
 export default function NewEquityGrant() {
-  const today = assertDefined(new Date().toISOString().split("T")[0]);
   const router = useRouter();
   const trpcUtils = trpc.useUtils();
   const company = useCurrentCompany();
@@ -65,8 +72,9 @@ export default function NewEquityGrant() {
       optionPoolId: data.optionPools[0]?.id ?? "",
       numberOfShares: 10_000,
       optionGrantType: "nso",
-      vestingCommencementDate: today,
+      vestingCommencementDate: today(getLocalTimeZone()),
       vestingTrigger: "invoice_paid",
+      boardApprovalDate: today(getLocalTimeZone()),
     },
     context: {
       optionPools: data.optionPools,
@@ -137,8 +145,6 @@ export default function NewEquityGrant() {
 
     if (values.vestingTrigger === "scheduled") {
       if (!values.vestingScheduleId) return form.setError("vestingScheduleId", { message: "Must be present." });
-      if (!values.vestingCommencementDate)
-        return form.setError("vestingCommencementDate", { message: "Must be present." });
 
       if (values.vestingScheduleId === "custom") {
         if (!values.totalVestingDurationMonths || values.totalVestingDurationMonths <= 0)
@@ -164,8 +170,9 @@ export default function NewEquityGrant() {
       totalVestingDurationMonths: values.totalVestingDurationMonths ?? null,
       cliffDurationMonths: values.cliffDurationMonths ?? null,
       vestingFrequencyMonths: values.vestingFrequencyMonths ?? null,
-      vestingCommencementDate: values.vestingCommencementDate ?? null,
+      vestingCommencementDate: values.vestingCommencementDate.toString(),
       vestingScheduleId: values.vestingScheduleId ?? null,
+      boardApprovalDate: values.boardApprovalDate.toString(),
     });
   });
 
@@ -300,6 +307,19 @@ export default function NewEquityGrant() {
             />
           </div>
 
+          <FormField
+            control={form.control}
+            name="boardApprovalDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <DatePicker {...field} label="Board approval date" granularity="day" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="grid gap-4">
             <h2 className="text-2xl font-medium">Vesting details</h2>
             <FormField
@@ -354,9 +374,8 @@ export default function NewEquityGrant() {
                   name="vestingCommencementDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Vesting commencement date</FormLabel>
                       <FormControl>
-                        <Input type="date" {...field} />
+                        <DatePicker {...field} label="Vesting commencement date" granularity="day" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -506,6 +525,12 @@ export default function NewEquityGrant() {
               )}
             />
           </div>
+
+          <FormField
+            control={form.control}
+            name="docusealTemplateId"
+            render={({ field }) => <TemplateSelector type={DocumentTemplateType.EquityPlanContract} {...field} />}
+          />
 
           <div className="grid gap-2">
             {form.formState.errors.root ? (

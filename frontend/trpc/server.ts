@@ -6,7 +6,6 @@ import { equityCalculationsRouter } from "@/trpc/routes/equityCalculations";
 import { filesRouter } from "@/trpc/routes/files";
 import { investorEntitiesRouter } from "@/trpc/routes/investorEntities";
 import { capTableUploadsRouter } from "./routes/capTableUploads";
-import { companyAdministratorsRouter } from "./routes/companyAdministrators";
 import { companyUpdatesRouter } from "./routes/companyUpdates";
 import { consolidatedInvoicesRouter } from "./routes/consolidatedInvoices";
 import { contractorsRouter } from "./routes/contractors";
@@ -17,7 +16,6 @@ import { documentsRouter } from "./routes/documents";
 import { equityAllocationsRouter } from "./routes/equityAllocations";
 import { equityGrantExercisesRouter } from "./routes/equityGrantExercises";
 import { equityGrantsRouter } from "./routes/equityGrants";
-import { equitySettingsRouter } from "./routes/equitySettings";
 import { expenseCategoriesRouter } from "./routes/expenseCategories";
 import { financialReportsRouter } from "./routes/financialReports";
 import { investorsRouter } from "./routes/investors";
@@ -47,7 +45,6 @@ export const appRouter = createRouter({
   equityGrantExercises: equityGrantExercisesRouter,
   tenderOffers: tenderOffersRouter,
   financialReports: financialReportsRouter,
-  equitySettings: equitySettingsRouter,
   optionPools: optionPoolsRouter,
   companyUpdates: companyUpdatesRouter,
   capTable: capTableRouter,
@@ -58,7 +55,6 @@ export const appRouter = createRouter({
   investorEntities: investorEntitiesRouter,
   equityAllocations: equityAllocationsRouter,
   equityCalculations: equityCalculationsRouter,
-  companyAdministrators: companyAdministratorsRouter,
   lawyers: lawyersRouter,
 });
 export type AppRouter = typeof appRouter;

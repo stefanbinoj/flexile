@@ -4,7 +4,6 @@ import {
   CircleCheck,
   Download,
   FileTextIcon,
-  GavelIcon,
   Info,
   Pencil,
   PercentIcon,
@@ -48,13 +47,11 @@ const typeLabels = {
   [DocumentType.TaxDocument]: "Tax form",
   [DocumentType.ExerciseNotice]: "Exercise notice",
   [DocumentType.EquityPlanContract]: "Equity plan",
-  [DocumentType.BoardConsent]: "Board consent",
 };
 
 const templateTypeLabels = {
   [DocumentTemplateType.ConsultingContract]: "Agreement",
   [DocumentTemplateType.EquityPlanContract]: "Equity plan",
-  [DocumentTemplateType.BoardConsent]: "Board consent",
 };
 
 const columnFiltersSchema = z.array(z.object({ id: z.string(), value: filterValueSchema }));
@@ -84,12 +81,8 @@ function getStatus(document: Document): { variant: StatusVariant | undefined; na
     case DocumentType.ShareCertificate:
     case DocumentType.ExerciseNotice:
       return { variant: "success", name: "Issued", text: "Issued" };
-    case DocumentType.BoardConsent:
     case DocumentType.ConsultingContract:
     case DocumentType.EquityPlanContract:
-      if (document.type === DocumentType.BoardConsent && !document.lawyerApproved) {
-        return { variant: "secondary", name: "Awaiting approval", text: "Awaiting approval" };
-      }
       return completedAt
         ? { variant: "success", name: "Signed", text: "Signed" }
         : { variant: "critical", name: "Signature required", text: "Signature required" };
@@ -195,21 +188,6 @@ const EditTemplates = () => {
                   <span className="mt-2 whitespace-normal">Equity grant contract</span>
                 </div>
               </MutationButton>
-              <MutationButton
-                idleVariant="outline"
-                className="h-auto rounded-md p-6"
-                mutation={createTemplate}
-                param={{
-                  companyId: company.id,
-                  name: "Option grant board consent",
-                  type: DocumentTemplateType.BoardConsent,
-                }}
-              >
-                <div className="flex flex-col items-center">
-                  <GavelIcon className="size-6" />
-                  <span className="mt-2 whitespace-normal">Option grant board consent</span>
-                </div>
-              </MutationButton>
             </div>
           </div>
         </DialogContent>
@@ -251,18 +229,13 @@ export default function DocumentsPage() {
   );
   const [signDocumentParam] = useQueryState("sign");
   const [signDocumentId, setSignDocumentId] = useState<bigint | null>(null);
-  const isSignable = (document: Document): document is SignableDocument => {
-    if (document.type === DocumentType.BoardConsent && !document.lawyerApproved && !user.roles.lawyer) return false;
-
-    return (
-      !!document.docusealSubmissionId &&
-      document.signatories.some(
-        (signatory) =>
-          !signatory.signedAt &&
-          (signatory.id === user.id || (signatory.title === "Company Representative" && isCompanyRepresentative)),
-      )
+  const isSignable = (document: Document): document is SignableDocument =>
+    !!document.docusealSubmissionId &&
+    document.signatories.some(
+      (signatory) =>
+        !signatory.signedAt &&
+        (signatory.id === user.id || (signatory.title === "Company Representative" && isCompanyRepresentative)),
     );
-  };
   const signDocument = signDocumentId
     ? documents.find((document): document is SignableDocument => document.id === signDocumentId && isSignable(document))
     : null;
@@ -319,9 +292,7 @@ export default function DocumentsPage() {
                     onClick={() => setSignDocumentId(document.id)}
                     disabled={!canSign}
                   >
-                    {document.type === DocumentType.BoardConsent && !document.lawyerApproved
-                      ? "Approve"
-                      : "Review and sign"}
+                    Review and sign
                   </Button>
                 ) : null}
                 {document.attachment ? (
@@ -468,28 +439,10 @@ const SignDocumentModal = ({ document, onClose }: { document: SignableDocument; 
     companyId: company.id,
   });
   const trpcUtils = trpc.useUtils();
-  const documentLawyerApproval = trpc.documents.approveByLawyer.useMutation({
-    onSuccess: async () => {
-      await trpcUtils.documents.list.invalidate();
-      router.push("/documents");
-      onClose();
-    },
-  });
-  const documentMemberApproval = trpc.documents.approveByMember.useMutation({
-    onSuccess: async () => {
-      await trpcUtils.documents.list.invalidate();
-      router.push("/documents");
-      onClose();
-    },
-  });
+
   const signDocument = trpc.documents.sign.useMutation({
-    onSuccess: async (data) => {
-      if (data.complete) {
-        documentMemberApproval.mutate({
-          companyId: company.id,
-          id: data.documentId,
-        });
-      }
+    onSuccess: async () => {
+      router.replace("/documents");
       await trpcUtils.documents.list.refetch();
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- not ideal, but there's no good way to assert this right now
       if (redirectUrl) router.push(redirectUrl as Route);
@@ -500,25 +453,9 @@ const SignDocumentModal = ({ document, onClose }: { document: SignableDocument; 
   return (
     <Dialog open onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-4xl">
-        {document.type === DocumentType.BoardConsent && !document.lawyerApproved && (
-          <DialogHeader>
-            <div className="flex justify-end gap-4">
-              <MutationButton
-                mutation={documentLawyerApproval}
-                param={{ companyId: company.id, id: document.id }}
-                loadingText="Approving..."
-                successText="Approved!"
-                errorText="Failed to approve"
-              >
-                Approve
-              </MutationButton>
-            </div>
-          </DialogHeader>
-        )}
         <DocusealForm
           src={`https://docuseal.com/s/${slug}`}
           readonlyFields={readonlyFields}
-          preview={document.type === DocumentType.BoardConsent && !document.lawyerApproved}
           customCss={customCss}
           onComplete={() => {
             signDocument.mutate({

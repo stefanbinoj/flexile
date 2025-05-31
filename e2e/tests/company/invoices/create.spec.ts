@@ -132,7 +132,6 @@ test.describe("invoice creation", () => {
       .then(takeOrThrow);
     expect(equityAllocation.equityPercentage).toBe(50);
     expect(equityAllocation.locked).toBe(true);
-    expect(equityAllocation.status).toBe("pending_grant_creation");
   });
 
   test("creates an invoice with an equity component for a project-based contractor", async ({ page }) => {
@@ -189,7 +188,6 @@ test.describe("invoice creation", () => {
       .then(takeOrThrow);
     expect(equityAllocation.equityPercentage).toBe(50);
     expect(equityAllocation.locked).toBe(true);
-    expect(equityAllocation.status).toBe("pending_grant_creation");
   });
 
   test("considers the invoice year when calculating equity", async ({ page }) => {
@@ -207,7 +205,6 @@ test.describe("invoice creation", () => {
       equityPercentage: 20,
       year: 2021,
       locked: true,
-      status: "approved",
     });
 
     await login(page, contractorUser);
