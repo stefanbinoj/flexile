@@ -2,10 +2,13 @@
 import { AlertTriangle, Copy, CircleCheck } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { TRPCClientError } from "@trpc/react-query";
-import { formatISO, isFuture } from "date-fns";
+import { isFuture } from "date-fns";
 import { useParams, useRouter } from "next/navigation";
 import { parseAsString, useQueryState } from "nuqs";
-import React, { useId, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
+import DatePicker from "@/components/DatePicker";
+import { getLocalTimeZone, today } from "@internationalized/date";
+import type { DateValue } from "react-aria-components";
 import DividendStatusIndicator from "@/app/equity/DividendStatusIndicator";
 import EquityGrantExerciseStatusIndicator from "@/app/equity/EquityGrantExerciseStatusIndicator";
 import DetailsModal from "@/app/equity/grants/DetailsModal";
@@ -36,7 +39,6 @@ import { z } from "zod";
 import { Form, FormField, FormLabel, FormControl, FormMessage, FormItem } from "@/components/ui/form";
 import FormFields from "../FormFields";
 import RadioButtons from "@/components/RadioButtons";
-import { Label } from "@/components/ui/label";
 import CopyButton from "@/components/CopyButton";
 import { Decimal } from "decimal.js";
 
@@ -51,7 +53,6 @@ const issuePaymentSchema = z.object({
 export default function ContractorPage() {
   const currentUser = useCurrentUser();
   const company = useCurrentCompany();
-  const uid = useId();
   const router = useRouter();
   const trpcUtils = trpc.useUtils();
   const { id } = useParams<{ id: string }>();
@@ -84,7 +85,7 @@ export default function ContractorPage() {
 
   const [endModalOpen, setEndModalOpen] = useState(false);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
-  const [endDate, setEndDate] = useState(formatISO(new Date(), { representation: "date" }));
+  const [endDate, setEndDate] = useState<DateValue | null>(today(getLocalTimeZone()));
   const [issuePaymentModalOpen, setIssuePaymentModalOpen] = useState(false);
   const issuePaymentForm = useForm({
     defaultValues: {
@@ -194,8 +195,7 @@ export default function ContractorPage() {
           </DialogHeader>
           <p>This action cannot be undone.</p>
           <div className="grid gap-2">
-            <Label htmlFor={`${uid}-end-date`}>End date</Label>
-            <Input type="date" id={`${uid}-end-date`} value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+            <DatePicker value={endDate} onChange={setEndDate} label="End date" granularity="day" />
           </div>
           <div className="grid gap-3">
             <Status variant="success">{user.displayName} will be able to submit invoices after contract end.</Status>
@@ -211,7 +211,10 @@ export default function ContractorPage() {
             <Button variant="outline" onClick={() => setEndModalOpen(false)}>
               No, cancel
             </Button>
-            <MutationButton mutation={endContract} param={{ companyId: company.id, id: contractor?.id ?? "", endDate }}>
+            <MutationButton
+              mutation={endContract}
+              param={{ companyId: company.id, id: contractor?.id ?? "", endDate: endDate?.toString() ?? "" }}
+            >
               Yes, end contract
             </MutationButton>
           </DialogFooter>
