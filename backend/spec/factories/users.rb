@@ -36,6 +36,13 @@ FactoryBot.define do
       without_compliance_info { true }
     end
 
+    trait :confirmed do
+      without_compliance_info
+      after :create do |user|
+        create(:user_compliance_info, :us_resident, :confirmed, user:)
+      end
+    end
+
     trait :without_legal_details do
       without_compliance_info
 
@@ -61,6 +68,7 @@ FactoryBot.define do
     end
 
     trait :contractor do
+      confirmed
       after :create do |user|
         create(:company_worker, user:)
       end

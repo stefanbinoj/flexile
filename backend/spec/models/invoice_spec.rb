@@ -673,36 +673,17 @@ RSpec.describe Invoice do
     let(:user) { create(:user) }
     let(:invoice) { create(:invoice, company:, user:) }
 
-    context "when company has no IRS tax forms requirement" do
-      before { company.update!(irs_tax_forms: false) }
-
+    context "when user has confirmed tax information" do
       it "returns true" do
+        allow(user).to receive(:tax_information_confirmed_at).and_return(Time.current)
         expect(invoice.tax_requirements_met?).to be true
-      end
-
-      context "when user has not confirmed tax information" do
-        it "returns true" do
-          allow(user).to receive(:tax_information_confirmed_at).and_return(nil)
-          expect(invoice.tax_requirements_met?).to be true
-        end
       end
     end
 
-    context "when company requires IRS tax forms" do
-      before { company.update!(irs_tax_forms: true) }
-
-      context "when user has confirmed tax information" do
-        it "returns true" do
-          allow(user).to receive(:tax_information_confirmed_at).and_return(Time.current)
-          expect(invoice.tax_requirements_met?).to be true
-        end
-      end
-
-      context "when user has not confirmed tax information" do
-        it "returns false" do
-          allow(user).to receive(:tax_information_confirmed_at).and_return(nil)
-          expect(invoice.tax_requirements_met?).to be false
-        end
+    context "when user has not confirmed tax information" do
+      it "returns false" do
+        allow(user).to receive(:tax_information_confirmed_at).and_return(nil)
+        expect(invoice.tax_requirements_met?).to be false
       end
     end
   end
