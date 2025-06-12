@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_05_160217) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_12_194925) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -73,20 +73,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_05_160217) do
     t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_balances_on_company_id"
-  end
-
-  create_table "cap_table_uploads", force: :cascade do |t|
-    t.bigint "company_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "uploaded_at", null: false
-    t.string "status", null: false
-    t.datetime "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "updated_at", null: false
-    t.jsonb "parsed_data"
-    t.string "external_id", null: false
-    t.index ["company_id"], name: "index_cap_table_uploads_on_company_id"
-    t.index ["external_id"], name: "index_cap_table_uploads_on_external_id", unique: true
-    t.index ["user_id"], name: "index_cap_table_uploads_on_user_id"
   end
 
   create_table "companies", force: :cascade do |t|
