@@ -43,8 +43,6 @@ Flexile syncs back to QuickBooks the following data:
 - Invoices and consolidated invoices as QBO **Bill**
 - Payments and consolidated payments as QBO **BillPayment**
 
-Company's monthly revenue and net income amounts are pulled in monthly on the 20th via the [`QuickbooksCompanyFinancialReportSyncJob`](../app/sidekiq/quickbooks_company_financial_report_sync_job.rb).
-
 **ℹ️ Note:**
 
 The integration's data is linked to QBO via the `integration_records` table.
@@ -94,10 +92,6 @@ Synchronized when a consolidated invoice [is created](../app/models/consolidated
 #### 5. Consolidated payments
 
 Synchronized when a consolidated payment [changes its status to `SUCCEEDED`](../app/models/consolidated_payment.rb).
-
-#### 6. Financials
-
-Every 20th of each month, [QuickbooksMonthlyFinancialReportSyncJob](../app/sidekiq/quickbooks_monthly_financial_report_sync_job.rb) is run with [sidekiq-cron](../config/sidekiq_schedule.yml). This job finds all the companies with active QuickBooks integrations and syncs their revenue and net income with [`QuickbooksCompanyFinancialReportSyncJob`](../app/sidekiq/quickbooks_company_financial_report_sync_job.rb).
 
 ### Integration statuses
 
