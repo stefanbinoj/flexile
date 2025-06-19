@@ -30,7 +30,7 @@ export const useCanSubmitInvoices = () => {
     { enabled: !!user.roles.worker },
   );
   const unsignedContractId = documents?.[0]?.id;
-  const hasLegalDetails = user.address.street_address;
+  const hasLegalDetails = user.address.street_address && !!user.taxInformationConfirmedAt;
   return { unsignedContractId, hasLegalDetails, canSubmitInvoices: !unsignedContractId && hasLegalDetails };
 };
 
