@@ -49,7 +49,7 @@ export default function PeoplePage() {
       payRateType: lastContractor?.payRateType ?? PayRateType.Hourly,
       payRateInSubunits: lastContractor?.payRateInSubunits ?? null,
       startDate: today(getLocalTimeZone()),
-      contractSignedElsewhere: false,
+      contractSignedElsewhere: lastContractor?.contractSignedElsewhere ?? false,
     },
     resolver: zodResolver(schema),
   });

@@ -46,7 +46,14 @@ export const contractorsRouter = createRouter({
         limit: input.limit,
       });
       const workers = rows.map((worker) => ({
-        ...pick(worker, ["startedAt", "payRateInSubunits", "endedAt", "role", "payRateType"]),
+        ...pick(worker, [
+          "startedAt",
+          "payRateInSubunits",
+          "endedAt",
+          "role",
+          "payRateType",
+          "contractSignedElsewhere",
+        ]),
         id: worker.externalId,
         user: {
           ...simpleUser(worker.user),

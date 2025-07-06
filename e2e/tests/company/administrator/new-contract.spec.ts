@@ -13,6 +13,8 @@ import { desc, eq } from "drizzle-orm";
 import type { NextFixture } from "next/experimental/testmode/playwright";
 import { companies, companyContractors, users } from "@/db/schema";
 import { assertDefined } from "@/utils/assert";
+import { companyContractorsFactory } from "@test/factories/companyContractors";
+import { PayRateType } from "@/db/enums";
 
 test.describe("New Contractor", () => {
   let company: typeof companies.$inferSelect;
@@ -172,6 +174,24 @@ test.describe("New Contractor", () => {
     await login(page, newUser);
 
     await expect(page.getByRole("heading", { name: "Invoices" })).toBeVisible();
+  });
+
+  test("pre-fills form with last contractor's values", async ({ page }) => {
+    await companyContractorsFactory.create({
+      companyId: company.id,
+      userId: user.id,
+      role: "Hourly Role 1",
+      payRateInSubunits: 10000,
+      payRateType: PayRateType.Custom,
+      contractSignedElsewhere: true,
+    });
+    await login(page, user);
+    await page.goto("/people");
+    await page.getByRole("button", { name: "Invite contractor" }).click();
+    await expect(page.getByLabel("Role")).toHaveValue("Hourly Role 1");
+    await expect(page.getByLabel("Rate")).toHaveValue("100");
+    await expect(page.getByLabel("Already signed contract elsewhere")).toBeChecked();
+    await expect(page.getByLabel("Custom")).toBeChecked();
   });
 
   // TODO: write these tests after the most important tests are done
