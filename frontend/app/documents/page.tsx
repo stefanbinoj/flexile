@@ -38,6 +38,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { storageKeys } from "@/models/constants";
+import TableSkeleton from "@/components/TableSkeleton";
 
 type Document = RouterOutput["documents"]["list"][number];
 type SignableDocument = Document & { docusealSubmissionId: number };
@@ -210,7 +211,7 @@ export default function DocumentsPage() {
   const canSign = user.address.street_address || isCompanyRepresentative;
 
   const currentYear = new Date().getFullYear();
-  const [documents] = trpc.documents.list.useSuspenseQuery({ companyId: company.id, userId });
+  const { data: documents = [], isLoading } = trpc.documents.list.useQuery({ companyId: company.id, userId });
 
   const inviteLawyerForm = useForm({ resolver: zodResolver(inviteLawyerSchema) });
   const inviteLawyer = trpc.lawyers.invite.useMutation({
@@ -376,7 +377,9 @@ export default function DocumentsPage() {
             </AlertDescription>
           </Alert>
         ) : null}
-        {documents.length > 0 ? (
+        {isLoading ? (
+          <TableSkeleton columns={6} />
+        ) : documents.length > 0 ? (
           <>
             <DataTable
               table={table}
