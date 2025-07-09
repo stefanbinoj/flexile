@@ -89,6 +89,7 @@ export default function TaxPage() {
   const router = useRouter();
   const trpcUtils = trpc.useUtils();
   const updateTaxSettings = trpc.users.updateTaxSettings.useMutation();
+  const queryClient = useQueryClient();
 
   const { data } = useSuspenseQuery({
     queryKey: ["settings-tax"],
@@ -157,6 +158,7 @@ export default function TaxPage() {
         await trpcUtils.documents.list.invalidate();
         router.push(`/documents?sign=${data.documentId}`);
       } else setShowCertificationModal(false);
+      await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
     },
   });
 
