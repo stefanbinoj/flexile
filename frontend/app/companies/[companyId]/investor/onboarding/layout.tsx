@@ -8,12 +8,20 @@ import { SignOutButton } from "@clerk/nextjs";
 import { CheckIcon } from "@heroicons/react/16/solid";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { steps } from ".";
 
 export default function InvestorOnboardingLayout({ children }: { children: React.ReactNode }) {
   const user = useCurrentUser();
-  const stepIndex = 1;
+  const pathname = usePathname();
+  let stepIndex = 0;
+  if (pathname) {
+    if (pathname.endsWith("/personal-details") || pathname.endsWith("/onboarding")) {
+      stepIndex = 1;
+    }
+    // TODO (techdebt): Add more route checks as more steps are added
+  }
 
   return (
     <div className="flex h-screen flex-col">
