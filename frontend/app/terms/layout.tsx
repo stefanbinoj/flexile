@@ -2,7 +2,7 @@ import logo from "@/images/flexile-logo.svg";
 import Image from "next/image";
 import React from "react";
 
-export default function PrivacyPageLayout({ children }: { children: React.ReactNode }) {
+export default function TermsPageLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-full flex-col">
       <header className="flex w-full items-center justify-center bg-black p-6 text-white print:hidden">
