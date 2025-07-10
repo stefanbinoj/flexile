@@ -8,6 +8,9 @@ import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
+import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { usePathname } from "next/navigation";
+import { PageHeader } from "@/components/layouts/PageHeader";
 
 const columnHelper =
   createColumnHelper<RouterOutput["convertibleSecurities"]["list"]["convertibleSecurities"][number]>();
@@ -21,15 +24,18 @@ const columns = [
 export default function Convertibles() {
   const company = useCurrentCompany();
   const user = useCurrentUser();
+  const pathname = usePathname();
   const [data] = trpc.convertibleSecurities.list.useSuspenseQuery({
     companyId: company.id,
     investorId: user.roles.investor?.id ?? "",
   });
 
   const table = useTable({ columns, data: data.convertibleSecurities });
+  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
 
   return (
     <>
+      {currentLink && <PageHeader currentLink={currentLink} />}
       {data.convertibleSecurities.length > 0 ? (
         <DataTable table={table} />
       ) : (

@@ -1,14 +1,14 @@
 "use client";
 import { CircleCheck, CircleAlert, Pencil, Info } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { linkClasses } from "@/components/Link";
 import Placeholder from "@/components/Placeholder";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { DocumentTemplateType } from "@/db/enums";
-import { useCurrentCompany } from "@/global";
+import { useCurrentCompany, useCurrentUser } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoney } from "@/utils/formatMoney";
@@ -23,12 +23,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import MutationButton from "@/components/MutationButton";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
+import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { PageHeader } from "@/components/layouts/PageHeader";
 type EquityGrant = RouterOutput["equityGrants"]["list"][number];
 
 export default function GrantsPage() {
   const router = useRouter();
   const company = useCurrentCompany();
+  const user = useCurrentUser();
+  const pathname = usePathname();
   const [data, { refetch }] = trpc.equityGrants.list.useSuspenseQuery({ companyId: company.id });
   const [cancellingGrantId, setCancellingGrantId] = useState<string | null>(null);
   const cancellingGrant = data.find((grant) => grant.id === cancellingGrantId);
@@ -76,7 +79,7 @@ export default function GrantsPage() {
     type: DocumentTemplateType.EquityPlanContract,
     signable: true,
   });
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
+  const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
   useEffect(() => {
     setHeaderActions(
       equityPlanContractTemplates.length > 0 ? (
@@ -86,14 +89,14 @@ export default function GrantsPage() {
             New option grant
           </Link>
         </Button>
-      ) : (
-        <Button>jjj</Button>
-      ),
+      ) : null,
     );
   }, [equityPlanContractTemplates.length]);
+  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
 
   return (
     <>
+      {currentLink && <PageHeader currentLink={currentLink} headerActions={headerActions} />}
       {equityPlanContractTemplates.length === 0 ? (
         <Alert>
           <Info />
