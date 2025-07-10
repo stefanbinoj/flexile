@@ -30,7 +30,7 @@ function View() {
         </MutationButton>
       ),
     );
-  }, []);
+  }, [company.id, id, sendTestEmail, update.sentAt, update.title, setTitle, setHeaderActions]);
   return (
     <>
       <RichText content={update.body} />

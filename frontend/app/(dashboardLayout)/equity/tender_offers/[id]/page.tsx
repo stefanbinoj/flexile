@@ -132,7 +132,7 @@ export default function BuybackView() {
 
   return (
     <>
-      <PageHeader title="Buyback details (`Sell Elections`)" />
+      <PageHeader title='Buyback details ("Sell Elections")' />
       {user.roles.investor?.investedInAngelListRuv ? (
         <Alert variant="destructive">
           <ExclamationTriangleIcon />

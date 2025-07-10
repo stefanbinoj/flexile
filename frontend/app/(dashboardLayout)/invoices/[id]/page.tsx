@@ -143,8 +143,6 @@ export default function InvoicePage() {
   }, [
     invoice.invoiceNumber,
     user.roles.administrator,
-    isActionable,
-    isDeletable,
     rejectModalOpen,
     deleteModalOpen,
     router,
@@ -153,13 +151,10 @@ export default function InvoicePage() {
     invoice.status,
     invoice.requiresAcceptanceByPayee,
     acceptPaymentModalOpen,
-    acceptPaymentMutation,
     defaultEquityPercentage,
     equityPercentage,
     equityAmountInCents,
     cashAmountInCents,
-    acceptPayment,
-    refetch,
   ]);
 
   return (

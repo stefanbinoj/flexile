@@ -291,7 +291,7 @@ const Edit = () => {
         </Button>
       </>,
     );
-  }, []);
+  }, [data.invoice.id, data.invoice.status, submit.isPending, setTitle, setHeaderActions]);
 
   return (
     <>

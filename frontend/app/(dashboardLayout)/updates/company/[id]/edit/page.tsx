@@ -15,6 +15,6 @@ export default function Edit() {
   useEffect(() => {
     setTitle("Edit company update");
     setHeaderActions(null);
-  }, []);
+  }, [setTitle, setHeaderActions]);
   return <EditPage update={update} />;
 }
