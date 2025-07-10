@@ -36,7 +36,7 @@ export default function CompanyUpdates() {
         </Button>
       ) : null,
     );
-  }, [user.roles.administrator]);
+  }, [user.roles.administrator, setTitle, setHeaderActions]);
 
   return (
     <>

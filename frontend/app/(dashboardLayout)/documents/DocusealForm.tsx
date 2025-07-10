@@ -1,5 +1,5 @@
 import { DocusealForm } from "@docuseal/react";
-import React from "react";
+import type { ComponentProps } from "react";
 import { useCurrentUser } from "@/global";
 
 // Define and export the centralized custom CSS
@@ -101,7 +101,7 @@ export const customCss = `
 `;
 
 // Update props type - Omit only email now
-export default function Form(props: Omit<React.ComponentProps<typeof DocusealForm>, "email">) {
+export default function Form(props: Omit<ComponentProps<typeof DocusealForm>, "email">) {
   const user = useCurrentUser();
 
   return (

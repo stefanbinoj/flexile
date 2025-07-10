@@ -142,19 +142,14 @@ export default function InvoicePage() {
     );
   }, [
     invoice.invoiceNumber,
-    user.roles.administrator,
-    rejectModalOpen,
-    deleteModalOpen,
-    router,
     invoice.id,
     invoice.userId,
     invoice.status,
     invoice.requiresAcceptanceByPayee,
-    acceptPaymentModalOpen,
-    defaultEquityPercentage,
-    equityPercentage,
-    equityAmountInCents,
-    cashAmountInCents,
+    user.roles.administrator,
+    user.id,
+    rejectModalOpen,
+    deleteModalOpen,
   ]);
 
   return (

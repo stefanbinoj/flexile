@@ -91,12 +91,12 @@ export default function GrantsPage() {
         </Button>
       ) : null,
     );
-  }, [equityPlanContractTemplates.length]);
+  }, [equityPlanContractTemplates.length, company.id, setHeaderActions]);
   const currentLink = navLinks(user, company).find((link) => link.route === pathname);
 
   return (
     <>
-      {currentLink && <PageHeader currentLink={currentLink} headerActions={headerActions} />}
+      {currentLink ? <PageHeader currentLink={currentLink} headerActions={headerActions} /> : null}
       {equityPlanContractTemplates.length === 0 ? (
         <Alert>
           <Info />

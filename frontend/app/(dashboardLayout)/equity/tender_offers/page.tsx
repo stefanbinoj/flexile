@@ -50,7 +50,7 @@ export default function Buybacks() {
 
   return (
     <>
-      {currentLink && <PageHeader currentLink={currentLink} headerActions={headerActions} />}
+      {!!currentLink && <PageHeader currentLink={currentLink} headerActions={headerActions} />}
       {data.length ? (
         <DataTable table={table} onRowClicked={(row) => router.push(`/equity/tender_offers/${row.id}`)} />
       ) : (

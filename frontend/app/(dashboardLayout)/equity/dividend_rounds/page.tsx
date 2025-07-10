@@ -41,7 +41,7 @@ export default function DividendRounds() {
 
   return (
     <>
-      {currentLink && <PageHeader currentLink={currentLink} />}
+      {!!currentLink && <PageHeader currentLink={currentLink} />}
       {isLoading ? (
         <TableSkeleton columns={3} />
       ) : dividendRounds.length > 0 ? (

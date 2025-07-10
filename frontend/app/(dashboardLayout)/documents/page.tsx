@@ -354,7 +354,7 @@ export default function DocumentsPage() {
         ) : null}
       </>,
     );
-  }, [isCompanyRepresentative, documents.length, user.roles.administrator, company.flags]);
+  }, [isCompanyRepresentative, documents.length, user.roles.administrator, company.flags, setTitle, setHeaderActions]);
 
   return (
     <>
