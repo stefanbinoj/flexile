@@ -36,7 +36,7 @@ export default function OnboardingHeader() {
         </ol>
       )}
       <div className="hidden justify-self-end text-sm md:block">
-        Signing up as {user.email}.{" "}
+        Signing up as {user?.email}.{" "}
         <SignOutButton>
           <Button variant="link">Logout</Button>
         </SignOutButton>
