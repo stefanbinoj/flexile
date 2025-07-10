@@ -1,5 +1,18 @@
 #!/bin/bash
 
+set -e
+
+if [ -f ".vercel/project.json" ]; then
+    pnpx vercel env pull .env
+elif [ ! -f ".env" ]; then
+    echo ".env file not found. Please run bin/setup first."
+fi
+
+pnpm install
+cd backend
+bundle install
+bin/rails db:prepare
+cd ..
 
 function kill_process_listening_on_port {
   lsof -i :$1 | grep LISTEN | awk '{print $2}' | xargs -r kill -9
