@@ -4,9 +4,12 @@ import React from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
 import { Progress } from "@/components/ui/progress";
-import { useCurrentCompany } from "@/global";
+import { useCurrentCompany, useCurrentUser } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
+import { usePathname } from "next/navigation";
+import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { PageHeader } from "@/components/layouts/PageHeader";
 
 type OptionPool = RouterOutput["optionPools"]["list"][number];
 
@@ -26,12 +29,16 @@ const columns = [
 
 export default function OptionPools() {
   const company = useCurrentCompany();
+  const user = useCurrentUser();
+  const pathname = usePathname();
   const [data] = trpc.optionPools.list.useSuspenseQuery({ companyId: company.id });
 
   const table = useTable({ columns, data });
+  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
 
   return (
     <>
+      {currentLink && <PageHeader currentLink={currentLink} />}
       {data.length > 0 ? (
         <DataTable table={table} />
       ) : (

@@ -2,7 +2,7 @@
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 import DatePicker from "@/components/DatePicker";
 import { MutationStatusButton } from "@/components/MutationButton";
 import NumberInput from "@/components/NumberInput";
@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { CalendarDate } from "@internationalized/date";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
+import { PageHeader } from "@/components/layouts/PageHeader";
 
 const formSchema = z.object({
   startDate: z.instanceof(CalendarDate, { message: "This field is required." }),
@@ -72,80 +72,79 @@ export default function NewBuyback() {
   });
 
   const submit = form.handleSubmit((data) => createMutation.mutate(data));
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle("Start new buyback");
-    setHeaderActions(
-      <Button variant="outline" asChild>
-        <Link href="/equity/tender_offers">Cancel</Link>
-      </Button>,
-    );
-  }, []);
+
+  const headerActions = (
+    <Button variant="outline" asChild>
+      <Link href="/equity/tender_offers">Cancel</Link>
+    </Button>
+  );
 
   return (
-    <Form {...form}>
-      <form onSubmit={(e) => void submit(e)} className="grid gap-4">
-        <FormField
-          control={form.control}
-          name="startDate"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <DatePicker {...field} label="Start date" granularity="day" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="endDate"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <DatePicker label="End date" {...field} granularity="day" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="minimumValuation"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Starting valuation</FormLabel>
-              <FormControl>
-                <NumberInput {...field} prefix="$" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <PageHeader title="Start new buyback" headerActions={headerActions} />
+      <Form {...form}>
+        <form onSubmit={(e) => void submit(e)} className="grid gap-4">
+          <FormField
+            control={form.control}
+            name="startDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <DatePicker {...field} label="Start date" granularity="day" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="endDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <DatePicker label="End date" {...field} granularity="day" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="minimumValuation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Starting valuation</FormLabel>
+                <FormControl>
+                  <NumberInput {...field} prefix="$" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="attachment"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Document package</FormLabel>
-              <FormControl>
-                <Input type="file" accept="application/zip" onChange={(e) => field.onChange(e.target.files?.[0])} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <MutationStatusButton
-          className="justify-self-end"
-          type="submit"
-          mutation={createMutation}
-          loadingText="Creating..."
-        >
-          Create buyback
-        </MutationStatusButton>
-      </form>
-    </Form>
+          <FormField
+            control={form.control}
+            name="attachment"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Document package</FormLabel>
+                <FormControl>
+                  <Input type="file" accept="application/zip" onChange={(e) => field.onChange(e.target.files?.[0])} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <MutationStatusButton
+            className="justify-self-end"
+            type="submit"
+            mutation={createMutation}
+            loadingText="Creating..."
+          >
+            Create buyback
+          </MutationStatusButton>
+        </form>
+      </Form>
+    </>
   );
 }

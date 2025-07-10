@@ -17,8 +17,10 @@ import DetailsModal from "@/app/(dashboardLayout)/equity/grants/DetailsModal";
 import ExerciseModal from "@/app/(dashboardLayout)/equity/grants/ExerciseModal";
 import type { RouterOutput } from "@/trpc";
 import { resend_company_equity_grant_exercise_path } from "@/utils/routes";
-import { forbidden } from "next/navigation";
+import { forbidden, usePathname } from "next/navigation";
 import { CircleCheck, Info } from "lucide-react";
+import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { PageHeader } from "@/components/layouts/PageHeader";
 const pluralizeGrants = (number: number) => `${number} ${pluralize("stock option grant", number)}`;
 
 type EquityGrant = RouterOutput["equityGrants"]["list"][number];
@@ -39,6 +41,7 @@ const investorGrantColumns = [
 export default function OptionsPage() {
   const company = useCurrentCompany();
   const user = useCurrentUser();
+  const pathname = usePathname();
   if (!user.roles.investor) forbidden();
   const [data] = trpc.equityGrants.list.useSuspenseQuery({
     companyId: company.id,
@@ -91,9 +94,11 @@ export default function OptionsPage() {
     },
     onSuccess: () => setTimeout(() => resendPaymentInstructions.reset(), 5000),
   });
+  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
 
   return (
     <>
+      {currentLink && <PageHeader currentLink={currentLink} />}
       {data.length === 0 ? (
         <Placeholder icon={CircleCheck}>You don't have any option grants right now.</Placeholder>
       ) : (

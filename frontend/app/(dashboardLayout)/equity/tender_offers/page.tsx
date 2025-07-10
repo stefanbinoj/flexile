@@ -1,8 +1,8 @@
 "use client";
 import { CircleCheck, Plus } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,14 @@ import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoney } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
+import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { PageHeader } from "@/components/layouts/PageHeader";
 
 export default function Buybacks() {
   const company = useCurrentCompany();
   const router = useRouter();
   const user = useCurrentUser();
+  const pathname = usePathname();
   const [data] = trpc.tenderOffers.list.useSuspenseQuery({ companyId: company.id });
 
   const columnHelper = createColumnHelper<RouterOutput["tenderOffers"]["list"][number]>();
@@ -30,7 +32,8 @@ export default function Buybacks() {
   ];
 
   const table = useTable({ columns, data });
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
+
+  const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
   useEffect(() => {
     setHeaderActions(
       user.roles.administrator ? (
@@ -43,9 +46,11 @@ export default function Buybacks() {
       ) : null,
     );
   }, [user.roles.administrator]);
+  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
 
   return (
     <>
+      {currentLink && <PageHeader currentLink={currentLink} headerActions={headerActions} />}
       {data.length ? (
         <DataTable table={table} onRowClicked={(row) => router.push(`/equity/tender_offers/${row.id}`)} />
       ) : (

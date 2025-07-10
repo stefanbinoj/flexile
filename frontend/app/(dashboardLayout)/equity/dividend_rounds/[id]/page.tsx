@@ -1,14 +1,14 @@
 "use client";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 import DividendStatusIndicator from "@/app/(dashboardLayout)/equity/DividendStatusIndicator";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { useCurrentCompany } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoneyFromCents } from "@/utils/formatMoney";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
+import { PageHeader } from "@/components/layouts/PageHeader";
 
 type Dividend = RouterOutput["dividends"]["list"][number];
 const rowLink = (row: Dividend) => `/people/${row.investor.user.id}?tab=dividends` as const;
@@ -41,12 +41,10 @@ export default function DividendRound() {
 
   const table = useTable({ columns, data });
 
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle("Dividend");
-    setHeaderActions(null);
-  }, []);
-
-  return <DataTable table={table} onRowClicked={(row) => router.push(rowLink(row))} />;
+  return (
+    <>
+      <PageHeader title={"Dividend"} />
+      <DataTable table={table} onRowClicked={(row) => router.push(rowLink(row))} />
+    </>
+  );
 }

@@ -4,7 +4,7 @@ import { ArrowDownTrayIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { isFuture, isPast } from "date-fns";
 import { utc } from "@date-fns/utc";
 import { useParams } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import MutationButton, { MutationStatusButton } from "@/components/MutationButton";
@@ -26,7 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormField, FormItem, FormControl, FormLabel, FormMessage } from "@/components/ui/form";
 import Link from "next/link";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
+import { PageHeader } from "@/components/layouts/PageHeader";
 type Bid = RouterOutput["tenderOffers"]["bids"]["list"][number];
 
 const formSchema = z.object({
@@ -130,13 +130,9 @@ export default function BuybackView() {
 
   const bidsTable = useTable({ data: bids, columns });
 
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  useEffect(() => {
-    setTitle("Buyback details (`Sell Elections`)");
-  }, []);
-
   return (
     <>
+      <PageHeader title="Buyback details (`Sell Elections`)" />
       {user.roles.investor?.investedInAngelListRuv ? (
         <Alert variant="destructive">
           <ExclamationTriangleIcon />

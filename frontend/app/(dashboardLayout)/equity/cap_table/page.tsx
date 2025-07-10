@@ -1,6 +1,6 @@
 "use client";
 import { CircleCheck } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
 import CopyButton from "@/components/CopyButton";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
@@ -18,12 +18,15 @@ import {
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatOwnershipPercentage } from "@/utils/numbers";
+import { PageHeader } from "@/components/layouts/PageHeader";
+import { navLinks } from "@/app/(dashboardLayout)/equity";
 
 type Data = RouterOutput["capTable"]["show"];
 
 export default function CapTable() {
   const company = useCurrentCompany();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const newSchema = searchParams.get("new_schema") !== null;
   const [data] = trpc.capTable.show.useSuspenseQuery({ companyId: company.id, newSchema });
   const user = useCurrentUser();
@@ -156,9 +159,10 @@ export default function CapTable() {
   );
 
   const shareClassesTable = useTable({ data: shareClassesData, columns: shareClassesColumns });
-
+  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
   return (
     <>
+      {currentLink && <PageHeader currentLink={currentLink} />}
       {selectedInvestors.length > 0 && (
         <Alert className="mb-4">
           <AlertDescription className="flex items-center justify-between">

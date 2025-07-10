@@ -8,6 +8,9 @@ import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
+import { usePathname } from "next/navigation";
+import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { PageHeader } from "@/components/layouts/PageHeader";
 
 const columnHelper = createColumnHelper<RouterOutput["shareHoldings"]["list"][number]>();
 const columns = [
@@ -21,15 +24,18 @@ const columns = [
 export default function Shares() {
   const company = useCurrentCompany();
   const user = useCurrentUser();
+  const pathname = usePathname();
   const [shareHoldings] = trpc.shareHoldings.list.useSuspenseQuery({
     companyId: company.id,
     investorId: user.roles.investor?.id ?? "",
   });
 
   const table = useTable({ data: shareHoldings, columns });
+  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
 
   return (
     <>
+      {currentLink && <PageHeader currentLink={currentLink} />}
       {shareHoldings.length > 0 ? (
         <DataTable table={table} />
       ) : (

@@ -1,16 +1,18 @@
 "use client";
 import { CircleCheck } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
-import { useCurrentCompany } from "@/global";
+import { useCurrentCompany, useCurrentUser } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
 import TableSkeleton from "@/components/TableSkeleton";
+import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { PageHeader } from "@/components/layouts/PageHeader";
 
 type DividendRound = RouterOutput["dividendRounds"]["list"][number];
 const columnHelper = createColumnHelper<DividendRound>();
@@ -32,10 +34,14 @@ export default function DividendRounds() {
   const router = useRouter();
   const { data: dividendRounds = [], isLoading } = trpc.dividendRounds.list.useQuery({ companyId: company.id });
 
+  const user = useCurrentUser();
+  const pathname = usePathname();
   const table = useTable({ columns, data: dividendRounds });
+  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
 
   return (
     <>
+      {currentLink && <PageHeader currentLink={currentLink} />}
       {isLoading ? (
         <TableSkeleton columns={3} />
       ) : dividendRounds.length > 0 ? (

@@ -30,11 +30,15 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import RichText from "@/components/RichText";
 import MutationButton from "@/components/MutationButton";
+import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { usePathname } from "next/navigation";
+import { PageHeader } from "@/components/layouts/PageHeader";
 
 type Dividend = RouterOutput["dividends"]["list"][number];
 const columnHelper = createColumnHelper<Dividend>();
 export default function Dividends() {
   const company = useCurrentCompany();
+  const pathname = usePathname();
   const user = useCurrentUser();
   const [data, { refetch }] = trpc.dividends.list.useSuspenseQuery({
     companyId: company.id,
@@ -114,9 +118,10 @@ export default function Dividends() {
     [],
   );
   const table = useTable({ columns, data });
-
+  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
   return (
     <>
+      {currentLink && <PageHeader currentLink={currentLink} />}
       {!user.legalName ? (
         <Alert>
           <Info />
