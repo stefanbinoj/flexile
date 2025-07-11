@@ -22,7 +22,7 @@ import { countries } from "@/models/constants";
 import { DocumentTemplateType, PayRateType, trpc } from "@/trpc/client";
 import { formatDate } from "@/utils/time";
 import { UserPlus, Users } from "lucide-react";
-import TemplateSelector from "@/app/(dashboardLayout)/document_templates/TemplateSelector";
+import TemplateSelector from "@/app/(dashboard)/document_templates/TemplateSelector";
 import FormFields, { schema as formSchema } from "./FormFields";
 import { Switch } from "@/components/ui/switch";
 import TableSkeleton from "@/components/TableSkeleton";

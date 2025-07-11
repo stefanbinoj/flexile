@@ -11,7 +11,7 @@ import { trpc } from "@/trpc/client";
 import { formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
 import TableSkeleton from "@/components/TableSkeleton";
-import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { navLinks } from "@/app/(dashboard)/equity";
 import { PageHeader } from "@/components/layouts/PageHeader";
 
 type DividendRound = RouterOutput["dividendRounds"]["list"][number];

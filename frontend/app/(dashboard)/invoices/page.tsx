@@ -27,8 +27,8 @@ import {
   useIsPayable,
   useIsDeletable,
   DeleteModal,
-} from "@/app/(dashboardLayout)/invoices/index";
-import Status, { StatusDetails } from "@/app/(dashboardLayout)/invoices/Status";
+} from "@/app/(dashboard)/invoices/index";
+import Status, { StatusDetails } from "@/app/(dashboard)/invoices/Status";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import MutationButton, { MutationStatusButton } from "@/components/MutationButton";

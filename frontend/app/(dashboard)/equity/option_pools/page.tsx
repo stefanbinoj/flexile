@@ -8,7 +8,7 @@ import { useCurrentCompany, useCurrentUser } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { usePathname } from "next/navigation";
-import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { navLinks } from "@/app/(dashboard)/equity";
 import { PageHeader } from "@/components/layouts/PageHeader";
 
 type OptionPool = RouterOutput["optionPools"]["list"][number];

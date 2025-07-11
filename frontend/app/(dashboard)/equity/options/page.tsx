@@ -13,13 +13,13 @@ import Placeholder from "@/components/Placeholder";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import MutationButton from "@/components/MutationButton";
-import DetailsModal from "@/app/(dashboardLayout)/equity/grants/DetailsModal";
-import ExerciseModal from "@/app/(dashboardLayout)/equity/grants/ExerciseModal";
+import DetailsModal from "@/app/(dashboard)/equity/grants/DetailsModal";
+import ExerciseModal from "@/app/(dashboard)/equity/grants/ExerciseModal";
 import type { RouterOutput } from "@/trpc";
 import { resend_company_equity_grant_exercise_path } from "@/utils/routes";
 import { forbidden, usePathname } from "next/navigation";
 import { CircleCheck, Info } from "lucide-react";
-import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { navLinks } from "@/app/(dashboard)/equity";
 import { PageHeader } from "@/components/layouts/PageHeader";
 const pluralizeGrants = (number: number) => `${number} ${pluralize("stock option grant", number)}`;
 

@@ -18,7 +18,7 @@ import { formatMoney } from "@/utils/formatMoney";
 import { request } from "@/utils/request";
 import { company_equity_grant_exercises_path } from "@/utils/routes";
 import { Label } from "@/components/ui/label";
-import Form, { customCss } from "@/app/(dashboardLayout)/documents/DocusealForm";
+import Form, { customCss } from "@/app/(dashboard)/documents/DocusealForm";
 
 type EquityGrant = RouterOutput["equityGrants"]["list"][number];
 

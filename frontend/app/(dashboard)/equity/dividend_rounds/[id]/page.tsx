@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import DividendStatusIndicator from "@/app/(dashboardLayout)/equity/DividendStatusIndicator";
+import DividendStatusIndicator from "@/app/(dashboard)/equity/DividendStatusIndicator";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { useCurrentCompany } from "@/global";
 import type { RouterOutput } from "@/trpc";

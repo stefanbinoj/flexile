@@ -23,7 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import MutationButton from "@/components/MutationButton";
-import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { navLinks } from "@/app/(dashboard)/equity";
 import { PageHeader } from "@/components/layouts/PageHeader";
 type EquityGrant = RouterOutput["equityGrants"]["list"][number];
 

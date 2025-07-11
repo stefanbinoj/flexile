@@ -1,7 +1,7 @@
 "use client";
 import { CircleCheck, Info } from "lucide-react";
 import React, { useMemo, useState } from "react";
-import DividendStatusIndicator from "@/app/(dashboardLayout)/equity/DividendStatusIndicator";
+import DividendStatusIndicator from "@/app/(dashboard)/equity/DividendStatusIndicator";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
 import { useCurrentCompany, useCurrentUser } from "@/global";
@@ -30,7 +30,7 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import RichText from "@/components/RichText";
 import MutationButton from "@/components/MutationButton";
-import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { navLinks } from "@/app/(dashboard)/equity";
 import { usePathname } from "next/navigation";
 import { PageHeader } from "@/components/layouts/PageHeader";
 

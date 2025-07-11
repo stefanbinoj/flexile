@@ -19,7 +19,7 @@ import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatOwnershipPercentage } from "@/utils/numbers";
 import { PageHeader } from "@/components/layouts/PageHeader";
-import { navLinks } from "@/app/(dashboardLayout)/equity";
+import { navLinks } from "@/app/(dashboard)/equity";
 
 type Data = RouterOutput["capTable"]["show"];
 

@@ -10,7 +10,7 @@ import {
   optionGrantTypeDisplayNames,
   relationshipDisplayNames,
   vestingTriggerDisplayNames,
-} from "@/app/(dashboardLayout)/equity/grants";
+} from "@/app/(dashboard)/equity/grants";
 import ComboBox from "@/components/ComboBox";
 import { MutationStatusButton } from "@/components/MutationButton";
 import NumberInput from "@/components/NumberInput";
@@ -24,7 +24,7 @@ import {
 } from "@/db/enums";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";
-import TemplateSelector from "@/app/(dashboardLayout)/document_templates/TemplateSelector";
+import TemplateSelector from "@/app/(dashboard)/document_templates/TemplateSelector";
 import DatePicker from "@/components/DatePicker";
 import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 import { useLayoutStore } from "@/components/layouts/LayoutStore";
