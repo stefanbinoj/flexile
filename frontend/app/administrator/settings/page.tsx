@@ -20,7 +20,7 @@ import QuickbooksIntegration from "./QuickbooksIntegration";
 import StripeMicrodepositVerification from "./StripeMicrodepositVerification";
 
 const formSchema = z.object({
-  website: z.string().url(),
+  website: z.string().url().nullish().or(z.literal("")),
   brandColor: z.string().nullable(),
   publicName: z.string(),
 });
@@ -121,7 +121,7 @@ export default function SettingsPage() {
                 <FormItem>
                   <FormLabel>Brand color</FormLabel>
                   <FormControl>
-                    <ColorPicker value={field.value} onChange={field.onChange} />
+                    <ColorPicker {...field} value={field.value ?? ""} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
