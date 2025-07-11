@@ -14,16 +14,17 @@ import { useCurrentCompany, useCurrentUser } from "@/global";
 import { trpc } from "@/trpc/client";
 import { formatDate } from "@/utils/time";
 import { useLayoutStore } from "@/components/layouts/LayoutStore";
+import TableSkeleton from "@/components/TableSkeleton";
 
 const useData = () => {
   const company = useCurrentCompany();
-  const [data] = trpc.companyUpdates.list.useSuspenseQuery({ companyId: company.id });
-  return data;
+  const { data = { updates: [] }, isLoading } = trpc.companyUpdates.list.useQuery({ companyId: company.id });
+  return { updates: data.updates, isLoading };
 };
 
 export default function CompanyUpdates() {
   const user = useCurrentUser();
-  const { updates } = useData();
+  const { updates, isLoading } = useData();
 
   const setTitle = useLayoutStore((state) => state.setTitle);
   const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
@@ -40,7 +41,9 @@ export default function CompanyUpdates() {
 
   return (
     <>
-      {updates.length ? (
+      {isLoading ? (
+        <TableSkeleton columns={4} />
+      ) : updates.length ? (
         user.roles.administrator ? (
           <AdminList />
         ) : (
