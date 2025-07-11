@@ -2,7 +2,7 @@
 import { CircleCheck, Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { formatMoney } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
 import { navLinks } from "@/app/(dashboard)/equity";
 import { PageHeader } from "@/components/layouts/PageHeader";
+import { useLayoutStore } from "@/components/layouts/LayoutStore";
 
 export default function Buybacks() {
   const company = useCurrentCompany();
@@ -33,7 +34,7 @@ export default function Buybacks() {
 
   const table = useTable({ columns, data });
 
-  const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
+  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
   useEffect(() => {
     setHeaderActions(
       user.roles.administrator ? (
@@ -45,12 +46,12 @@ export default function Buybacks() {
         </Button>
       ) : null,
     );
-  }, [user.roles.administrator]);
+  }, [user.roles.administrator, setHeaderActions]);
   const currentLink = navLinks(user, company).find((link) => link.route === pathname);
 
   return (
     <>
-      {!!currentLink && <PageHeader currentLink={currentLink} headerActions={headerActions} />}
+      {!!currentLink && <PageHeader currentLink={currentLink} />}
       {data.length ? (
         <DataTable table={table} onRowClicked={(row) => router.push(`/equity/tender_offers/${row.id}`)} />
       ) : (

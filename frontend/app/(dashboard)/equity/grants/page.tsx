@@ -25,6 +25,7 @@ import {
 import MutationButton from "@/components/MutationButton";
 import { navLinks } from "@/app/(dashboard)/equity";
 import { PageHeader } from "@/components/layouts/PageHeader";
+import { useLayoutStore } from "@/components/layouts/LayoutStore";
 type EquityGrant = RouterOutput["equityGrants"]["list"][number];
 
 export default function GrantsPage() {
@@ -79,7 +80,7 @@ export default function GrantsPage() {
     type: DocumentTemplateType.EquityPlanContract,
     signable: true,
   });
-  const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
+  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
   useEffect(() => {
     setHeaderActions(
       equityPlanContractTemplates.length > 0 ? (
@@ -96,7 +97,7 @@ export default function GrantsPage() {
 
   return (
     <>
-      {currentLink ? <PageHeader currentLink={currentLink} headerActions={headerActions} /> : null}
+      {currentLink ? <PageHeader currentLink={currentLink} /> : null}
       {equityPlanContractTemplates.length === 0 ? (
         <Alert>
           <Info />
