@@ -9,6 +9,6 @@ export default function New() {
   useEffect(() => {
     setTitle("New company update");
     setHeaderActions(null);
-  }, []);
+  }, [setTitle, setHeaderActions]);
   return <EditPage />;
 }

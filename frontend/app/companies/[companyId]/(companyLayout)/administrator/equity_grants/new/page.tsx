@@ -101,7 +101,7 @@ export default function NewEquityGrant() {
       form.setValue("optionGrantType", lastGrant?.optionGrantType ?? "nso");
       form.setValue("issueDateRelationship", lastGrant?.issueDateRelationship ?? "employee");
     }
-  }, [recipientId]);
+  }, [recipientId, recipient, form]);
 
   useEffect(() => {
     if (!optionPool) return;
@@ -113,7 +113,7 @@ export default function NewEquityGrant() {
     form.setValue("deathExerciseMonths", optionPool.deathExerciseMonths);
     form.setValue("disabilityExerciseMonths", optionPool.disabilityExerciseMonths);
     form.setValue("retirementExerciseMonths", optionPool.retirementExerciseMonths);
-  }, [optionPoolId]);
+  }, [optionPoolId, optionPool, form]);
 
   const createEquityGrant = trpc.equityGrants.create.useMutation({
     onSuccess: async () => {
@@ -189,7 +189,7 @@ export default function NewEquityGrant() {
         <Link href="/equity/grants">Cancel</Link>
       </Button>,
     );
-  }, []);
+  }, [setTitle, setHeaderActions]);
 
   return (
     <Form {...form}>
@@ -266,7 +266,7 @@ export default function NewEquityGrant() {
                   <ComboBox
                     {...field}
                     options={Object.entries(relationshipDisplayNames).map(([key, value]) => ({
-                      label: value as string,
+                      label: value,
                       value: key,
                     }))}
                     placeholder="Select relationship"

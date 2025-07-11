@@ -35,7 +35,7 @@ export default function Shares() {
 
   return (
     <>
-      {currentLink && <PageHeader currentLink={currentLink} />}
+      {currentLink ? <PageHeader currentLink={currentLink} /> : null}
       {shareHoldings.length > 0 ? (
         <DataTable table={table} />
       ) : (

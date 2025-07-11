@@ -38,7 +38,7 @@ export default function OptionPools() {
 
   return (
     <>
-      {currentLink && <PageHeader currentLink={currentLink} />}
+      {currentLink ? <PageHeader currentLink={currentLink} /> : null}
       {data.length > 0 ? (
         <DataTable table={table} />
       ) : (

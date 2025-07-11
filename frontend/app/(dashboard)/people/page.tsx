@@ -142,7 +142,7 @@ export default function PeoplePage() {
         </Button>
       ) : null,
     );
-  }, [workers.length]);
+  }, [workers.length, setTitle, setHeaderActions]);
 
   return (
     <>

@@ -98,7 +98,7 @@ export default function OptionsPage() {
 
   return (
     <>
-      {currentLink && <PageHeader currentLink={currentLink} />}
+      {currentLink ? <PageHeader currentLink={currentLink} /> : null}
       {data.length === 0 ? (
         <Placeholder icon={CircleCheck}>You don't have any option grants right now.</Placeholder>
       ) : (
