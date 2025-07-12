@@ -16,5 +16,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     }
   }, [user, searchParams]);
 
-  return children;
+  return (
+    <div className="flex h-full flex-col">
+      <main className="flex flex-1 flex-col items-center overflow-y-auto px-3 py-3">
+        <div className="my-auto grid w-full max-w-md gap-4 pt-7 print:my-0 print:max-w-full">{children}</div>
+      </main>
+    </div>
+  );
 }

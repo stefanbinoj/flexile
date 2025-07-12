@@ -9,10 +9,6 @@ import { trpc } from "@/trpc/client";
 import { useForm } from "react-hook-form";
 
 export default function SettingsPage() {
-  return <DetailsSection />;
-}
-
-const DetailsSection = () => {
   const user = useCurrentUser();
   const form = useForm({
     defaultValues: {
@@ -69,4 +65,4 @@ const DetailsSection = () => {
       </form>
     </Form>
   );
-};
+}
