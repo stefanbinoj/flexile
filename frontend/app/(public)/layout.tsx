@@ -1,12 +1,12 @@
+import Image from "next/image";
 import React from "react";
 import logo from "@/images/flexile-logo.svg";
-import Image from "next/image";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-full flex-col">
       <header className="flex w-full items-center justify-center bg-black p-6 text-white print:hidden">
-        <a href="https://flexile.com/" className="invert">
+        <a href="https://flexile.com/" className="invert" rel="noopener noreferrer">
           <Image src={logo} alt="Flexile" />
         </a>
       </header>

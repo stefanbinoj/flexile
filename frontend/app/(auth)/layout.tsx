@@ -1,7 +1,8 @@
 "use client";
-import { useUserStore } from "@/global";
+
 import { redirect, RedirectType, useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
+import { useUserStore } from "@/global";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const user = useUserStore((state) => state.user);
