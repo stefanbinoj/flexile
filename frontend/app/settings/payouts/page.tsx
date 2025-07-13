@@ -1,5 +1,11 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { AlertTriangle, Check, CircleDollarSign, Plus } from "lucide-react";
+import React, { Fragment, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import MutationButton, { MutationStatusButton } from "@/components/MutationButton";
 import NumberInput from "@/components/NumberInput";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -11,12 +17,6 @@ import { useCurrentUser } from "@/global";
 import { currencyCodes, sanctionedCountries } from "@/models/constants";
 import { request } from "@/utils/request";
 import { settings_bank_account_path, settings_bank_accounts_path, settings_dividend_path } from "@/utils/routes";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { AlertTriangle, Check, CircleDollarSign, Plus } from "lucide-react";
-import { Fragment, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import BankAccountModal, { type BankAccount, bankAccountSchema } from "./BankAccountModal";
 
 export default function PayoutsPage() {

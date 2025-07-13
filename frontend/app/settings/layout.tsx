@@ -1,6 +1,19 @@
 "use client";
 
 import {
+  Briefcase,
+  Building,
+  ChevronLeft,
+  CreditCard,
+  Landmark,
+  PieChart,
+  ScrollText,
+  UserCircle2,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React from "react";
+import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
@@ -16,19 +29,6 @@ import {
 } from "@/components/ui/sidebar";
 import { useCurrentUser } from "@/global";
 import type { CurrentUser } from "@/models/user";
-import {
-  Briefcase,
-  Building,
-  ChevronLeft,
-  CreditCard,
-  Landmark,
-  PieChart,
-  ScrollText,
-  UserCircle2,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React from "react";
 
 const personalLinks = [
   {
