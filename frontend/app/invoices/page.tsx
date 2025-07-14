@@ -21,7 +21,7 @@ import Link from "next/link";
 import React, { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import StripeMicrodepositVerification from "@/app/administrator/settings/StripeMicrodepositVerification";
+import StripeMicrodepositVerification from "@/app/settings/administrator/StripeMicrodepositVerification";
 import {
   ApproveButton,
   DeleteModal,

@@ -54,25 +54,25 @@ const personalLinks = [
 const companyLinks = [
   {
     label: "Workspace settings",
-    route: "/administrator/settings" as const,
+    route: "/settings/administrator" as const,
     icon: Building,
     isVisible: (user: CurrentUser) => !!user.roles.administrator,
   },
   {
     label: "Company details",
-    route: "/administrator/settings/details" as const,
+    route: "/settings/administrator/details" as const,
     icon: Briefcase,
     isVisible: (user: CurrentUser) => !!user.roles.administrator,
   },
   {
     label: "Billing",
-    route: "/administrator/settings/billing" as const,
+    route: "/settings/administrator/billing" as const,
     icon: CreditCard,
     isVisible: (user: CurrentUser) => !!user.roles.administrator,
   },
   {
     label: "Equity value",
-    route: "/administrator/settings/equity" as const,
+    route: "/settings/administrator/equity" as const,
     icon: PieChart,
     isVisible: (user: CurrentUser) => !!user.roles.administrator,
   },
