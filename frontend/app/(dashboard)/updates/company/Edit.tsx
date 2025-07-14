@@ -73,9 +73,7 @@ const Edit = ({ update }: { update?: CompanyUpdate }) => {
     },
   });
 
-  const submit = form.handleSubmit(async () => {
-    setModalOpen(true);
-  });
+  const submit = form.handleSubmit(() => setModalOpen(true));
 
   return (
     <Form {...form}>
