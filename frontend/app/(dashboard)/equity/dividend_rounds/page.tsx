@@ -6,12 +6,6 @@ import React from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
 import TableSkeleton from "@/components/TableSkeleton";
-import { useCurrentCompany, useCurrentUser } from "@/global";
-import type { RouterOutput } from "@/trpc";
-import { trpc } from "@/trpc/client";
-import { formatMoneyFromCents } from "@/utils/formatMoney";
-import { formatDate } from "@/utils/time";
-import { navLinks } from "@/app/(dashboard)/equity";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,6 +13,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { useCurrentCompany, useCurrentUser } from "@/global";
+import type { RouterOutput } from "@/trpc";
+import { trpc } from "@/trpc/client";
+import { formatMoneyFromCents } from "@/utils/formatMoney";
+import { formatDate } from "@/utils/time";
+import { navLinks } from "@/app/(dashboard)/equity";
 
 type DividendRound = RouterOutput["dividendRounds"]["list"][number];
 const columnHelper = createColumnHelper<DividendRound>();

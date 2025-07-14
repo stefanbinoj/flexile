@@ -1,16 +1,20 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
 import {
   optionGrantTypeDisplayNames,
   relationshipDisplayNames,
   vestingTriggerDisplayNames,
 } from "@/app/(dashboard)/equity/grants";
+import TemplateSelector from "@/app/(dashboard)/document_templates/TemplateSelector";
+import DatePicker from "@/components/DatePicker";
 import ComboBox from "@/components/ComboBox";
 import { MutationStatusButton } from "@/components/MutationButton";
 import NumberInput from "@/components/NumberInput";
@@ -24,9 +28,6 @@ import {
 } from "@/db/enums";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";
-import TemplateSelector from "@/app/(dashboard)/document_templates/TemplateSelector";
-import DatePicker from "@/components/DatePicker";
-import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 
 const MAX_VESTING_DURATION_IN_MONTHS = 120;
 
@@ -289,7 +290,7 @@ export default function NewEquityGrant() {
                     <ComboBox
                       {...field}
                       options={Object.entries(optionGrantTypeDisplayNames).map(([key, value]) => ({
-                        label: value as string,
+                        label: value,
                         value: key,
                       }))}
                       placeholder="Select grant type"
