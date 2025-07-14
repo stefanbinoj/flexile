@@ -1,33 +1,30 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/16/solid";
 import { EnvelopeIcon, UsersIcon } from "@heroicons/react/24/outline";
 import { useMutation } from "@tanstack/react-query";
-
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import MutationButton, { MutationStatusButton } from "@/components/MutationButton";
 import { Editor as RichTextEditor } from "@/components/RichText";
 import { Button } from "@/components/ui/button";
-
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { useCurrentCompany } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
-
 import { pluralize } from "@/utils/pluralize";
-
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 
 const formSchema = z.object({
   title: z.string().trim().min(1, "This field is required."),
   body: z.string().regex(/>\w/u, "This field is required."),
   videoUrl: z.string().nullable(),
 });
+
 type CompanyUpdate = RouterOutput["companyUpdates"]["get"];
 const Edit = ({ update }: { update?: CompanyUpdate }) => {
   const company = useCurrentCompany();
