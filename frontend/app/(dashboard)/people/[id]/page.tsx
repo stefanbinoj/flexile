@@ -8,7 +8,7 @@ import { Decimal } from "decimal.js";
 import { AlertTriangle, CircleCheck, Copy } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { parseAsString, useQueryState } from "nuqs";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import type { DateValue } from "react-aria-components";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -39,7 +39,6 @@ import { request } from "@/utils/request";
 import { approve_company_invoices_path, company_equity_exercise_payment_path } from "@/utils/routes";
 import { formatDate } from "@/utils/time";
 import FormFields, { schema as formSchema } from "../FormFields";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
 
 const issuePaymentSchema = z.object({
   amountInCents: z.number().min(0),
@@ -169,27 +168,31 @@ export default function ContractorPage() {
   });
   const issuePaymentValues = issuePaymentForm.watch();
   const submitIssuePayment = issuePaymentForm.handleSubmit((values) => issuePaymentMutation.mutateAsync(values));
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle(user.displayName);
-    setHeaderActions(
-      contractor ? (
-        <div className="flex items-center gap-3">
-          <Button onClick={() => setIssuePaymentModalOpen(true)}>Issue payment</Button>
-          {contractor.endedAt && !isFuture(contractor.endedAt) ? (
-            <Status variant="critical">Alumni</Status>
-          ) : !contractor.endedAt || isFuture(contractor.endedAt) ? (
-            <Button variant="outline" onClick={() => setEndModalOpen(true)}>
-              End contract
-            </Button>
-          ) : null}
-        </div>
-      ) : null,
-    );
-  }, [user.displayName, contractor, setIssuePaymentModalOpen, setEndModalOpen]);
+
   return (
     <>
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-sm font-bold">{user.displayName}</h1>
+            <div className="flex items-center gap-3 print:hidden">
+              {contractor ? (
+                <div className="flex items-center gap-3">
+                  <Button onClick={() => setIssuePaymentModalOpen(true)}>Issue payment</Button>
+                  {contractor.endedAt && !isFuture(contractor.endedAt) ? (
+                    <Status variant="critical">Alumni</Status>
+                  ) : !contractor.endedAt || isFuture(contractor.endedAt) ? (
+                    <Button variant="outline" onClick={() => setEndModalOpen(true)}>
+                      End contract
+                    </Button>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </header>
+
       <Dialog open={endModalOpen} onOpenChange={setEndModalOpen}>
         <DialogContent>
           <DialogHeader>

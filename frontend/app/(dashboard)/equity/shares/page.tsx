@@ -10,7 +10,13 @@ import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
 import { usePathname } from "next/navigation";
 import { navLinks } from "@/app/(dashboard)/equity";
-import { PageHeader } from "@/components/layouts/PageHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const columnHelper = createColumnHelper<RouterOutput["shareHoldings"]["list"][number]>();
 const columns = [
@@ -35,7 +41,26 @@ export default function Shares() {
 
   return (
     <>
-      {currentLink ? <PageHeader currentLink={currentLink} /> : null}
+      {!!currentLink && (
+        <header className="pt-2 md:pt-4">
+          <div className="grid gap-y-8">
+            <div className="grid items-center justify-between gap-3 md:flex">
+              <h1 className="text-sm font-bold">
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem>Equity</BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>{currentLink.label}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </h1>
+            </div>
+          </div>
+        </header>
+      )}
+
       {shareHoldings.length > 0 ? (
         <DataTable table={table} />
       ) : (

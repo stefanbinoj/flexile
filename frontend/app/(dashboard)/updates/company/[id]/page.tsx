@@ -1,12 +1,11 @@
 "use client";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 import MutationButton from "@/components/MutationButton";
 import RichText from "@/components/RichText";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
 
 function View() {
   const company = useCurrentCompany();
@@ -17,21 +16,26 @@ function View() {
 
   const youtubeId = update.videoUrl && /(?:youtube\.com.*[?&]v=|youtu\.be\/)([\w-]+)/u.exec(update.videoUrl)?.[1];
 
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle(`${update.sentAt ? "" : "Previewing:"} ${update.title}`);
-    setHeaderActions(
-      !update.sentAt && (
-        <MutationButton loadingText="Sending..." mutation={sendTestEmail} param={{ companyId: company.id, id }}>
-          <EnvelopeIcon className="size-4" />
-          Send test email
-        </MutationButton>
-      ),
-    );
-  }, [company.id, id, sendTestEmail, update.sentAt, update.title, setTitle, setHeaderActions]);
   return (
     <>
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-sm font-bold">
+              {update.sentAt ? "" : "Previewing:"} {update.title}
+            </h1>
+            <div className="flex items-center gap-3 print:hidden">
+              {!update.sentAt && (
+                <MutationButton loadingText="Sending..." mutation={sendTestEmail} param={{ companyId: company.id, id }}>
+                  <EnvelopeIcon className="size-4" />
+                  Send test email
+                </MutationButton>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
+
       <RichText content={update.body} />
 
       {youtubeId ? (

@@ -38,7 +38,6 @@ import type { RouterOutput } from "@/trpc";
 import { DocumentTemplateType, DocumentType, trpc } from "@/trpc/client";
 import { assertDefined } from "@/utils/assert";
 import { formatDate } from "@/utils/time";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
 
 type Document = RouterOutput["documents"]["list"][number];
 type SignableDocument = Document & { docusealSubmissionId: number };
@@ -339,25 +338,26 @@ export default function DocumentsPage() {
   });
 
   const filingDueDateFor1099DIV = new Date(currentYear, 2, 31);
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle("Documents");
-    setHeaderActions(
-      <>
-        {isCompanyRepresentative && documents.length === 0 ? <EditTemplates /> : null}
-        {user.roles.administrator && company.flags.includes("lawyers") ? (
-          <Button onClick={() => setShowInviteModal(true)}>
-            <BriefcaseBusiness className="size-4" />
-            Invite lawyer
-          </Button>
-        ) : null}
-      </>,
-    );
-  }, [isCompanyRepresentative, documents.length, user.roles.administrator, company.flags, setTitle, setHeaderActions]);
 
   return (
     <>
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-sm font-bold">Documents</h1>
+            <div className="flex items-center gap-3 print:hidden">
+              {isCompanyRepresentative && documents.length === 0 ? <EditTemplates /> : null}
+              {user.roles.administrator && company.flags.includes("lawyers") ? (
+                <Button onClick={() => setShowInviteModal(true)}>
+                  <BriefcaseBusiness className="size-4" />
+                  Invite lawyer
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </header>
+
       <div className="grid gap-4">
         {canSign ? null : (
           <Alert>

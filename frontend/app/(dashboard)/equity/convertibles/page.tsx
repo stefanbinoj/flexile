@@ -10,7 +10,13 @@ import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
 import { navLinks } from "@/app/(dashboard)/equity";
 import { usePathname } from "next/navigation";
-import { PageHeader } from "@/components/layouts/PageHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const columnHelper =
   createColumnHelper<RouterOutput["convertibleSecurities"]["list"]["convertibleSecurities"][number]>();
@@ -35,7 +41,25 @@ export default function Convertibles() {
 
   return (
     <>
-      {currentLink ? <PageHeader currentLink={currentLink} /> : null}
+      {!!currentLink && (
+        <header className="pt-2 md:pt-4">
+          <div className="grid gap-y-8">
+            <div className="grid items-center justify-between gap-3 md:flex">
+              <h1 className="text-sm font-bold">
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem>Equity</BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>{currentLink.label}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </h1>
+            </div>
+          </div>
+        </header>
+      )}
       {data.convertibleSecurities.length > 0 ? (
         <DataTable table={table} />
       ) : (

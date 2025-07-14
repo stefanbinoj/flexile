@@ -2,7 +2,7 @@
 import { ArrowRight, CircleCheck, Trash } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import MutationButton from "@/components/MutationButton";
 import Placeholder from "@/components/Placeholder";
@@ -14,7 +14,6 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { useCurrentCompany, useCurrentUser } from "@/global";
 import { trpc } from "@/trpc/client";
 import { formatDate } from "@/utils/time";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
 
 const useData = () => {
   const company = useCurrentCompany();
@@ -26,21 +25,23 @@ export default function CompanyUpdates() {
   const user = useCurrentUser();
   const { updates, isLoading } = useData();
 
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle("Updates");
-    setHeaderActions(
-      user.roles.administrator ? (
-        <Button asChild>
-          <Link href="/updates/company/new">New update</Link>
-        </Button>
-      ) : null,
-    );
-  }, [user.roles.administrator, setTitle, setHeaderActions]);
-
   return (
     <>
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-sm font-bold">Updates</h1>
+            <div className="flex items-center gap-3 print:hidden">
+              {user.roles.administrator ? (
+                <Button asChild>
+                  <Link href="/updates/company/new">New update</Link>
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </header>
+
       {isLoading ? (
         <TableSkeleton columns={4} />
       ) : updates.length ? (

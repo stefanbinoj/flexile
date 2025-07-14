@@ -2,7 +2,7 @@
 import { CircleCheck, Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,13 @@ import { trpc } from "@/trpc/client";
 import { formatMoney } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
 import { navLinks } from "@/app/(dashboard)/equity";
-import { PageHeader } from "@/components/layouts/PageHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function Buybacks() {
   const company = useCurrentCompany();
@@ -32,25 +38,39 @@ export default function Buybacks() {
   ];
 
   const table = useTable({ columns, data });
-
-  const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
-  useEffect(() => {
-    setHeaderActions(
-      user.roles.administrator ? (
-        <Button asChild size="small" variant="outline">
-          <Link href="/equity/tender_offers/new">
-            <Plus className="size-4" />
-            New buyback
-          </Link>
-        </Button>
-      ) : null,
-    );
-  }, [user.roles.administrator]);
   const currentLink = navLinks(user, company).find((link) => link.route === pathname);
 
   return (
     <>
-      {!!currentLink && <PageHeader currentLink={currentLink} headerActions={headerActions} />}
+      {!!currentLink && (
+        <header className="pt-2 md:pt-4">
+          <div className="grid gap-y-8">
+            <div className="flex items-center justify-between gap-3">
+              <h1 className="text-sm font-bold">
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem>Equity</BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>{currentLink.label}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </h1>
+              <div className="flex items-center gap-3 print:hidden">
+                {user.roles.administrator ? (
+                  <Button asChild size="small" variant="outline">
+                    <Link href="/equity/tender_offers/new">
+                      <Plus className="size-4" />
+                      New buyback
+                    </Link>
+                  </Button>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </header>
+      )}
       {data.length ? (
         <DataTable table={table} onRowClicked={(row) => router.push(`/equity/tender_offers/${row.id}`)} />
       ) : (

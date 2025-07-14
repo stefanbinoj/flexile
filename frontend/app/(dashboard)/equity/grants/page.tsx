@@ -2,7 +2,7 @@
 import { CircleAlert, CircleCheck, Info, Pencil } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { linkClasses } from "@/components/Link";
 import MutationButton from "@/components/MutationButton";
@@ -24,7 +24,13 @@ import { trpc } from "@/trpc/client";
 import { formatMoney } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
 import { navLinks } from "@/app/(dashboard)/equity";
-import { PageHeader } from "@/components/layouts/PageHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 type EquityGrant = RouterOutput["equityGrants"]["list"][number];
 
 export default function GrantsPage() {
@@ -79,24 +85,40 @@ export default function GrantsPage() {
     type: DocumentTemplateType.EquityPlanContract,
     signable: true,
   });
-  const [headerActions, setHeaderActions] = useState<React.ReactNode>(null);
-  useEffect(() => {
-    setHeaderActions(
-      equityPlanContractTemplates.length > 0 ? (
-        <Button asChild>
-          <Link href={`/companies/${company.id}/administrator/equity_grants/new`}>
-            <Pencil className="size-4" />
-            New option grant
-          </Link>
-        </Button>
-      ) : null,
-    );
-  }, [equityPlanContractTemplates.length, company.id, setHeaderActions]);
   const currentLink = navLinks(user, company).find((link) => link.route === pathname);
 
   return (
     <>
-      {currentLink ? <PageHeader currentLink={currentLink} headerActions={headerActions} /> : null}
+      {!!currentLink && (
+        <header className="pt-2 md:pt-4">
+          <div className="grid gap-y-8">
+            <div className="flex items-center justify-between gap-3">
+              <h1 className="text-sm font-bold">
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem>Equity</BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>{currentLink.label}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </h1>
+              <div className="flex items-center gap-3 print:hidden">
+                {equityPlanContractTemplates.length > 0 ? (
+                  <Button asChild>
+                    <Link href={`/companies/${company.id}/administrator/equity_grants/new`}>
+                      <Pencil className="size-4" />
+                      New option grant
+                    </Link>
+                  </Button>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </header>
+      )}
+
       {equityPlanContractTemplates.length === 0 ? (
         <Alert>
           <Info />

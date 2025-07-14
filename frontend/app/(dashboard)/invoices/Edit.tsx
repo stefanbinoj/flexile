@@ -35,7 +35,6 @@ import {
   new_company_invoice_path,
 } from "@/utils/routes";
 import QuantityInput from "./QuantityInput";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
 import { LegacyAddress as Address, useCanSubmitInvoices } from ".";
 
 const addressSchema = z.object({
@@ -272,29 +271,29 @@ const Edit = () => {
     setEquityPercent(equityAllocation?.equityPercentage ?? 0);
   }, [equityAllocation]);
 
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle(data.invoice.id ? "Edit invoice" : "New invoice");
-    setHeaderActions(
-      <>
-        {data.invoice.id && data.invoice.status === "rejected" ? (
-          <div className="inline-flex items-center">Action required</div>
-        ) : (
-          <Button variant="outline" asChild>
-            <Link href="/invoices">Cancel</Link>
-          </Button>
-        )}
-        <Button variant="primary" onClick={() => validate() && submit.mutate()} disabled={submit.isPending}>
-          <PaperAirplaneIcon className="size-4" />
-          {submit.isPending ? "Sending..." : data.invoice.id ? "Re-submit invoice" : "Send invoice"}
-        </Button>
-      </>,
-    );
-  }, [data.invoice.id, data.invoice.status, submit.isPending, setTitle, setHeaderActions]);
-
   return (
     <>
+      <header className="px-3 py-2 md:px-4 md:py-4">
+        <div className="grid gap-y-8">
+          <div className="grid items-center justify-between gap-3 md:flex">
+            <h1 className="text-sm font-bold">{data.invoice.id ? "Edit invoice" : "New invoice"}</h1>
+            <div className="flex items-center gap-3 print:hidden">
+              {data.invoice.id && data.invoice.status === "rejected" ? (
+                <div className="inline-flex items-center">Action required</div>
+              ) : (
+                <Button variant="outline" asChild>
+                  <Link href="/invoices">Cancel</Link>
+                </Button>
+              )}
+              <Button variant="primary" onClick={() => validate() && submit.mutate()} disabled={submit.isPending}>
+                <PaperAirplaneIcon className="size-4" />
+                {submit.isPending ? "Sending..." : data.invoice.id ? "Re-submit invoice" : "Send invoice"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
       {payRateInSubunits && lineItems.some((lineItem) => lineItem.pay_rate_in_subunits > payRateInSubunits) ? (
         <Alert variant="warning">
           <CircleAlert />

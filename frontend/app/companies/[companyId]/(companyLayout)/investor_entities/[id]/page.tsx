@@ -10,8 +10,6 @@ import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
-import { useEffect } from "react";
 
 type InvestorEntity = RouterOutput["investorEntities"]["get"];
 type ShareHolding = InvestorEntity["shares"][number];
@@ -27,15 +25,16 @@ export default function InvestorEntityPage() {
   const [selectedTab] = useQueryState("tab", parseAsString.withDefault(tabs[0].tab));
   const [data] = trpc.investorEntities.get.useSuspenseQuery({ companyId: company.id, id });
 
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle(data.name);
-    setHeaderActions(null);
-  }, [data.name]);
-
   return (
     <>
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-sm font-bold">{data.name}</h1>
+          </div>
+        </div>
+      </header>
+
       <Tabs links={tabs.map((tab) => ({ label: tab.label, route: `?tab=${tab.tab}` }))} />
       {selectedTab === "shares" ? <SharesTab shares={data.shares} /> : <OptionsTab grants={data.grants} />}
     </>

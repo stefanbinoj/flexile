@@ -7,7 +7,7 @@ import { formatISO } from "date-fns";
 import { UserPlus, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import TemplateSelector from "@/app/(dashboard)/document_templates/TemplateSelector";
@@ -27,7 +27,6 @@ import { countries } from "@/models/constants";
 import { DocumentTemplateType, PayRateType, trpc } from "@/trpc/client";
 import { formatDate } from "@/utils/time";
 import FormFields, { schema as formSchema } from "./FormFields";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
 
 const schema = formSchema.extend({
   email: z.string().email(),
@@ -130,22 +129,24 @@ export default function PeoplePage() {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle("People");
-    setHeaderActions(
-      workers.length === 0 ? (
-        <Button size="small" variant="outline" onClick={() => setShowInviteModal(true)}>
-          <UserPlus className="size-4" />
-          Invite contractor
-        </Button>
-      ) : null,
-    );
-  }, [workers.length, setTitle, setHeaderActions]);
-
   return (
     <>
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-sm font-bold">People</h1>
+            <div className="flex items-center gap-3 print:hidden">
+              {workers.length === 0 ? (
+                <Button size="small" variant="outline" onClick={() => setShowInviteModal(true)}>
+                  <UserPlus className="size-4" />
+                  Invite contractor
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </header>
+
       {isLoading ? (
         <TableSkeleton columns={4} />
       ) : workers.length > 0 ? (

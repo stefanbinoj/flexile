@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
@@ -8,7 +9,6 @@ import { useCurrentCompany } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoneyFromCents } from "@/utils/formatMoney";
-import { PageHeader } from "@/components/layouts/PageHeader";
 
 type Dividend = RouterOutput["dividends"]["list"][number];
 const rowLink = (row: Dividend) => `/people/${row.investor.user.id}?tab=dividends` as const;
@@ -43,7 +43,13 @@ export default function DividendRound() {
 
   return (
     <>
-      <PageHeader title={"Dividend"} />
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="grid items-center justify-between gap-3 md:flex">
+            <h1 className="text-sm font-bold">Dividends</h1>
+          </div>
+        </div>
+      </header>
       <DataTable table={table} onRowClicked={(row) => router.push(rowLink(row))} />
     </>
   );

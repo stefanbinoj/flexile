@@ -4,14 +4,13 @@ import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { z } from "zod";
 import MutationButton from "@/components/MutationButton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useCurrentCompany } from "@/global";
 import { DocumentTemplateType, trpc } from "@/trpc/client";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
 
 const templateSchema = z.object({
   name: z.string(),
@@ -144,69 +143,75 @@ export default function EditTemplatePage() {
       },
     );
   }
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle(template.companyId !== null ? `${id ? "Edit" : "New"} ${template.name}` : `Default ${template.name}`);
-    setHeaderActions(
-      <Button variant="outline" asChild>
-        <Link href="/documents">
-          <ArrowLeftIcon className="size-4" />
-          Back to documents
-        </Link>
-      </Button>,
-    );
-  }, [template.name, template.companyId, id]);
 
   return (
-    <div className="grid gap-6">
-      {template.companyId === null ? (
-        <Alert variant="destructive">
-          <InformationCircleIcon />
-          <AlertDescription>
-            <div className="flex items-center justify-between gap-4">
-              <p>This is our default template. Replace it with your own to fully customize it.</p>
-              <MutationButton
-                size="small"
-                idleVariant="critical"
-                mutation={trpc.documents.templates.create.useMutation({
-                  onSuccess: (id) => {
-                    router.push(`/document_templates/${id}`);
-                  },
-                })}
-                param={{
-                  companyId: company.id,
-                  name: template.name,
-                  type: template.type,
-                }}
-              >
-                Replace default template
-              </MutationButton>
+    <>
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-sm font-bold">
+              {template.companyId !== null ? `${id ? "Edit" : "New"} ${template.name}` : `Default ${template.name}`}
+            </h1>
+            <div className="flex items-center gap-3 print:hidden">
+              <Button variant="outline" asChild>
+                <Link href="/documents">
+                  <ArrowLeftIcon className="size-4" />
+                  Back to documents
+                </Link>
+              </Button>
             </div>
-          </AlertDescription>
-        </Alert>
-      ) : docusealTemplate?.documents.length && !isSignable(docusealTemplate) ? (
-        <Alert>
-          <InformationCircleIcon />
-          <AlertDescription>
-            To use this template, add at least the signature fields for both parties below.
-          </AlertDescription>
-        </Alert>
-      ) : null}
-      <DocusealBuilder
-        token={token}
-        withSendButton={false}
-        withSignYourselfButton={false}
-        withTitle={false}
-        roles={Array.from(new Set(requiredFields.map((field) => field.role)))}
-        fieldTypes={["text", "date", "checkbox"]}
-        fields={fields}
-        requiredFields={requiredFields}
-        onSave={(data) => save(templateSchema.parse(data))}
-        onLoad={(data) => setDocusealTemplate(templateSchema.parse(data))}
-        preview={template.companyId === null}
-        autosave
-        customCss={`
+          </div>
+        </div>
+      </header>
+
+      <div className="grid gap-6">
+        {template.companyId === null ? (
+          <Alert variant="destructive">
+            <InformationCircleIcon />
+            <AlertDescription>
+              <div className="flex items-center justify-between gap-4">
+                <p>This is our default template. Replace it with your own to fully customize it.</p>
+                <MutationButton
+                  size="small"
+                  idleVariant="critical"
+                  mutation={trpc.documents.templates.create.useMutation({
+                    onSuccess: (id) => {
+                      router.push(`/document_templates/${id}`);
+                    },
+                  })}
+                  param={{
+                    companyId: company.id,
+                    name: template.name,
+                    type: template.type,
+                  }}
+                >
+                  Replace default template
+                </MutationButton>
+              </div>
+            </AlertDescription>
+          </Alert>
+        ) : docusealTemplate?.documents.length && !isSignable(docusealTemplate) ? (
+          <Alert>
+            <InformationCircleIcon />
+            <AlertDescription>
+              To use this template, add at least the signature fields for both parties below.
+            </AlertDescription>
+          </Alert>
+        ) : null}
+        <DocusealBuilder
+          token={token}
+          withSendButton={false}
+          withSignYourselfButton={false}
+          withTitle={false}
+          roles={Array.from(new Set(requiredFields.map((field) => field.role)))}
+          fieldTypes={["text", "date", "checkbox"]}
+          fields={fields}
+          requiredFields={requiredFields}
+          onSave={(data) => save(templateSchema.parse(data))}
+          onLoad={(data) => setDocusealTemplate(templateSchema.parse(data))}
+          preview={template.companyId === null}
+          autosave
+          customCss={`
             .mx-auto:has(> #main_container) {
               padding-left: 0px;
             }
@@ -345,7 +350,8 @@ export default function EditTemplatePage() {
               color: var(--accent-foreground, black) !important;
             }
           `}
-      />
-    </div>
+        />
+      </div>
+    </>
   );
 }

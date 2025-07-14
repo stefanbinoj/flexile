@@ -26,7 +26,6 @@ import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatServerDate } from "@/utils/time";
 import { VESTED_SHARES_CLASS } from "..";
 import LetterOfTransmissal from "./LetterOfTransmissal";
-import { PageHeader } from "@/components/layouts/PageHeader";
 type Bid = RouterOutput["tenderOffers"]["bids"]["list"][number];
 
 const formSchema = z.object({
@@ -132,7 +131,13 @@ export default function BuybackView() {
 
   return (
     <>
-      <PageHeader title='Buyback details ("Sell Elections")' />
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="grid items-center justify-between gap-3 md:flex">
+            <h1 className="text-sm font-bold">Buyback details ("Sell Elections")</h1>
+          </div>
+        </div>
+      </header>
       {user.roles.investor?.investedInAngelListRuv ? (
         <Alert variant="destructive">
           <ExclamationTriangleIcon />

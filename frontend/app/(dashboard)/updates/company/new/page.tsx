@@ -1,14 +1,19 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import EditPage from "../Edit";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
 
 export default function New() {
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle("New company update");
-    setHeaderActions(null);
-  }, [setTitle, setHeaderActions]);
-  return <EditPage />;
+  return (
+    <>
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="grid items-center justify-between gap-3 md:flex">
+            <h1 className="text-sm font-bold">New company update</h1>
+          </div>
+        </div>
+      </header>
+
+      <EditPage />
+    </>
+  );
 }

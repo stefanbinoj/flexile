@@ -53,11 +53,8 @@ import { trpc } from "@/trpc/client";
 import { request } from "@/utils/request";
 import { company_switch_path } from "@/utils/routes";
 import { storageKeys } from "@/models/constants";
-import { useLayoutStore } from "./LayoutStore";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
-  const title = useLayoutStore((state) => state.title);
-  const headerActions = useLayoutStore((state) => state.headerActions);
   const user = useCurrentUser();
 
   const queryClient = useQueryClient();
@@ -155,20 +152,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <SidebarInset>
         <div className="flex flex-col not-print:h-screen not-print:overflow-hidden">
           <main className="flex flex-1 flex-col pb-4 not-print:overflow-y-auto">
-            <div>
-              <header className="px-3 py-2 md:px-4 md:py-4">
-                <div className="grid gap-y-8">
-                  <div className="grid items-center justify-between gap-3 md:flex">
-                    <div>
-                      <div className="flex items-center justify-between gap-2">
-                        <SidebarTrigger className="md:hidden" />
-                        <h1 className="text-sm font-bold">{title}</h1>
-                      </div>
-                    </div>
-                    {headerActions ? <div className="flex items-center gap-3 print:hidden">{headerActions}</div> : null}
-                  </div>
-                </div>
-              </header>
+            <div className="px-3 py-2 md:hidden">
+              <SidebarTrigger />
             </div>
             <div className="mx-3 flex flex-col gap-6">{children}</div>
           </main>

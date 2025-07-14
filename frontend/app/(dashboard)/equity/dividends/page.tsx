@@ -31,8 +31,14 @@ import { request } from "@/utils/request";
 import { company_dividend_path, sign_company_dividend_path } from "@/utils/routes";
 import { formatDate } from "@/utils/time";
 import { navLinks } from "@/app/(dashboard)/equity";
-import { PageHeader } from "@/components/layouts/PageHeader";
 import { usePathname } from "next/navigation";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 type Dividend = RouterOutput["dividends"]["list"][number];
 const columnHelper = createColumnHelper<Dividend>();
@@ -121,7 +127,25 @@ export default function Dividends() {
   const currentLink = navLinks(user, company).find((link) => link.route === pathname);
   return (
     <>
-      {currentLink && <PageHeader currentLink={currentLink} />}
+      {!!currentLink && (
+        <header className="pt-2 md:pt-4">
+          <div className="grid gap-y-8">
+            <div className="grid items-center justify-between gap-3 md:flex">
+              <h1 className="text-sm font-bold">
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem>Equity</BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>{currentLink.label}</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </h1>
+            </div>
+          </div>
+        </header>
+      )}
       {!user.legalName ? (
         <Alert>
           <Info />

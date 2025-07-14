@@ -64,7 +64,6 @@ import { formatDate } from "@/utils/time";
 import EquityPercentageLockModal from "./EquityPercentageLockModal";
 import QuantityInput from "./QuantityInput";
 import { useCanSubmitInvoices } from ".";
-import { useLayoutStore } from "@/components/layouts/LayoutStore";
 
 const statusNames = {
   received: "Awaiting approval",
@@ -333,24 +332,26 @@ export default function InvoicesPage() {
     </>
   ) : null;
 
-  const setTitle = useLayoutStore((state) => state.setTitle);
-  const setHeaderActions = useLayoutStore((state) => state.setHeaderActions);
-  useEffect(() => {
-    setTitle("Invoices");
-    setHeaderActions(
-      user.roles.worker ? (
-        <Button asChild variant="outline" size="small" disabled={!canSubmitInvoices}>
-          <Link href="/invoices/new" inert={!canSubmitInvoices}>
-            <Plus className="size-4" />
-            New invoice
-          </Link>
-        </Button>
-      ) : null,
-    );
-  }, [canSubmitInvoices, user.roles.worker]);
-
   return (
     <>
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-sm font-bold">Invoices</h1>
+            <div className="flex items-center gap-3 print:hidden">
+              {user.roles.worker ? (
+                <Button asChild variant="outline" size="small" disabled={!canSubmitInvoices}>
+                  <Link href="/invoices/new" inert={!canSubmitInvoices}>
+                    <Plus className="size-4" />
+                    New invoice
+                  </Link>
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </header>
+
       <div className="grid gap-4">
         {workerNotice ? (
           <Alert>

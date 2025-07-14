@@ -16,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";
 import { md5Checksum } from "@/utils";
-import { PageHeader } from "@/components/layouts/PageHeader";
 
 const formSchema = z.object({
   startDate: z.instanceof(CalendarDate, { message: "This field is required." }),
@@ -73,15 +72,21 @@ export default function NewBuyback() {
 
   const submit = form.handleSubmit((data) => createMutation.mutate(data));
 
-  const headerActions = (
-    <Button variant="outline" asChild>
-      <Link href="/equity/tender_offers">Cancel</Link>
-    </Button>
-  );
-
   return (
     <>
-      <PageHeader title="Start new buyback" headerActions={headerActions} />
+      <header className="pt-2 md:pt-4">
+        <div className="grid gap-y-8">
+          <div className="flex items-center justify-between gap-3">
+            <h1 className="text-sm font-bold">Start new buyback</h1>
+            <div className="flex items-center gap-3 print:hidden">
+              <Button variant="outline" asChild>
+                <Link href="/equity/tender_offers">Cancel</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
       <Form {...form}>
         <form onSubmit={(e) => void submit(e)} className="grid gap-4">
           <FormField
