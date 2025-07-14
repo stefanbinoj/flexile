@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import env from "@/env/client";
 import { useCurrentCompany, useCurrentUser } from "@/global";
@@ -17,7 +18,6 @@ import { assertDefined } from "@/utils/assert";
 import { formatMoney } from "@/utils/formatMoney";
 import { request } from "@/utils/request";
 import { company_equity_grant_exercises_path } from "@/utils/routes";
-import { Label } from "@/components/ui/label";
 import Form, { customCss } from "@/app/(dashboard)/documents/DocusealForm";
 
 type EquityGrant = RouterOutput["equityGrants"]["list"][number];

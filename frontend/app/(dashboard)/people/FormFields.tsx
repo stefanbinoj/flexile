@@ -1,13 +1,15 @@
-import React from "react";
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { PayRateType, trpc } from "@/trpc/client";
-import { useFormContext } from "react-hook-form";
-import RadioButtons from "@/components/RadioButtons";
-import NumberInput from "@/components/NumberInput";
-import { useUserStore } from "@/global";
-import ComboBox from "@/components/ComboBox";
 import { skipToken } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { useFormContext } from "react-hook-form";
 import { z } from "zod";
+import NumberInput from "@/components/NumberInput";
+import RadioButtons from "@/components/RadioButtons";
+import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
+import { useUserStore } from "@/global";
+import { PayRateType, trpc } from "@/trpc/client";
 
 export const schema = z.object({
   payRateType: z.nativeEnum(PayRateType),
@@ -21,7 +23,11 @@ export default function FormFields() {
   const companyId = useUserStore((state) => state.user?.currentCompanyId);
   const { data: workers } = trpc.contractors.list.useQuery(companyId ? { companyId, excludeAlumni: true } : skipToken);
 
-  const uniqueRoles = workers ? [...new Set(workers.map((worker) => worker.role))].sort() : [];
+  const [rolePopoverOpen, setRolePopoverOpen] = useState(false);
+  const roleRegex = new RegExp(form.watch("role"), "iu");
+  const filteredRoles = workers
+    ? [...new Set(workers.map((worker) => worker.role))].sort().filter((value) => roleRegex.test(value))
+    : [];
 
   return (
     <>
@@ -31,13 +37,47 @@ export default function FormFields() {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Role</FormLabel>
-            <FormControl>
-              <ComboBox
-                {...field}
-                options={uniqueRoles.map((role) => ({ value: role, label: role }))}
-                placeholder="Select or type a role"
-              />
-            </FormControl>
+            <Command shouldFilter={false}>
+              <Popover open={!!rolePopoverOpen && filteredRoles.length > 0}>
+                <PopoverAnchor asChild>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="text"
+                      autoComplete="off"
+                      onFocus={() => setRolePopoverOpen(true)}
+                      onBlur={() => setRolePopoverOpen(false)}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        setRolePopoverOpen(true);
+                      }}
+                    />
+                  </FormControl>
+                </PopoverAnchor>
+                <PopoverContent
+                  onOpenAutoFocus={(e) => e.preventDefault()}
+                  className="p-0"
+                  style={{ width: "var(--radix-popover-trigger-width)" }}
+                >
+                  <CommandList>
+                    <CommandGroup>
+                      {filteredRoles.map((option) => (
+                        <CommandItem
+                          key={option}
+                          value={option}
+                          onSelect={(e) => {
+                            field.onChange(e);
+                            setRolePopoverOpen(false);
+                          }}
+                        >
+                          {option}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </PopoverContent>
+              </Popover>
+            </Command>
             <FormMessage />
           </FormItem>
         )}

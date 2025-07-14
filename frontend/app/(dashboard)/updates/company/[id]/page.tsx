@@ -2,7 +2,6 @@
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useParams } from "next/navigation";
 import React, { useEffect } from "react";
-
 import MutationButton from "@/components/MutationButton";
 import RichText from "@/components/RichText";
 import { useCurrentCompany } from "@/global";

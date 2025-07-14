@@ -1,28 +1,28 @@
 "use client";
-import { CircleCheck, CircleAlert, Pencil, Info } from "lucide-react";
+import { CircleAlert, CircleCheck, Info, Pencil } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { linkClasses } from "@/components/Link";
+import MutationButton from "@/components/MutationButton";
 import Placeholder from "@/components/Placeholder";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { DocumentTemplateType } from "@/db/enums";
 import { useCurrentCompany, useCurrentUser } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoney } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
-import { useEffect, useMemo, useState } from "react";
-import {
-  DialogContent,
-  DialogFooter,
-  DialogDescription,
-  Dialog,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import MutationButton from "@/components/MutationButton";
 import { navLinks } from "@/app/(dashboard)/equity";
 import { PageHeader } from "@/components/layouts/PageHeader";
 type EquityGrant = RouterOutput["equityGrants"]["list"][number];
