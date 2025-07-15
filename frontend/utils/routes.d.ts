@@ -724,7 +724,7 @@ export const company_administrator_quickbook_path: ((
 
 /**
  * Generates rails route to
- * /internal/companies/:company_id/settings/administrator/bank_accounts(.:format)
+ * /internal/companies/:company_id/administrator/settings/bank_accounts(.:format)
  * @param {any} company_id
  * @param {object | undefined} options
  * @returns {string} route path
@@ -736,7 +736,7 @@ export const company_administrator_settings_bank_accounts_url: ((
 
 /**
  * Generates rails route to
- * /internal/companies/:company_id/settings/administrator/bank_accounts(.:format)
+ * /internal/companies/:company_id/administrator/settings/bank_accounts(.:format)
  * @param {any} company_id
  * @param {object | undefined} options
  * @returns {string} route path
@@ -748,7 +748,7 @@ export const company_administrator_settings_bank_accounts_path: ((
 
 /**
  * Generates rails route to
- * /internal/companies/:company_id/settings/administrator/equity(.:format)
+ * /internal/companies/:company_id/administrator/settings/equity(.:format)
  * @param {any} company_id
  * @param {object | undefined} options
  * @returns {string} route path
@@ -760,7 +760,7 @@ export const company_administrator_settings_equity_url: ((
 
 /**
  * Generates rails route to
- * /internal/companies/:company_id/settings/administrator/equity(.:format)
+ * /internal/companies/:company_id/administrator/settings/equity(.:format)
  * @param {any} company_id
  * @param {object | undefined} options
  * @returns {string} route path

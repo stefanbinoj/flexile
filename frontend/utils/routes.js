@@ -84,7 +84,7 @@ const __jsr = (
         },
         NIL: {
             define() {
-                // Defined using const __jsr =
+                // Defined using const __jsr = 
             },
             isSupported() {
                 return true;
@@ -1039,7 +1039,7 @@ export const company_administrator_quickbook_path = /*#__PURE__*/ __jsr.r({"comp
 
 /**
  * Generates rails route to
- * /internal/companies/:company_id/settings/administrator/bank_accounts(.:format)
+ * /internal/companies/:company_id/administrator/settings/bank_accounts(.:format)
  * @param {any} company_id
  * @param {object | undefined} options
  * @returns {string} route path
@@ -1048,7 +1048,7 @@ export const company_administrator_settings_bank_accounts_url = /*#__PURE__*/ __
 
 /**
  * Generates rails route to
- * /internal/companies/:company_id/settings/administrator/bank_accounts(.:format)
+ * /internal/companies/:company_id/administrator/settings/bank_accounts(.:format)
  * @param {any} company_id
  * @param {object | undefined} options
  * @returns {string} route path
@@ -1057,7 +1057,7 @@ export const company_administrator_settings_bank_accounts_path = /*#__PURE__*/ _
 
 /**
  * Generates rails route to
- * /internal/companies/:company_id/settings/administrator/equity(.:format)
+ * /internal/companies/:company_id/administrator/settings/equity(.:format)
  * @param {any} company_id
  * @param {object | undefined} options
  * @returns {string} route path
@@ -1066,7 +1066,7 @@ export const company_administrator_settings_equity_url = /*#__PURE__*/ __jsr.r({
 
 /**
  * Generates rails route to
- * /internal/companies/:company_id/settings/administrator/equity(.:format)
+ * /internal/companies/:company_id/administrator/settings/equity(.:format)
  * @param {any} company_id
  * @param {object | undefined} options
  * @returns {string} route path
