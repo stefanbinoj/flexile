@@ -44,7 +44,7 @@ export function DashboardHeader({
             </div>
           </div>
 
-          {headerAction && <div className="flex items-center gap-3 print:hidden">{headerAction}</div>}
+          {headerAction ? <div className="flex items-center gap-3 print:hidden">{headerAction}</div> : null}
         </div>
       </div>
     </header>
