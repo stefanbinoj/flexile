@@ -87,7 +87,7 @@ export default function InvoicePage() {
       <header className="pt-2 md:pt-4">
         <div className="grid gap-y-8">
           <div className="grid items-center justify-between gap-3 md:flex">
-            <h1 className="text-sm font-bold">Invoice ${invoice.invoiceNumber}</h1>
+            <h1 className="text-sm font-bold">Invoice {invoice.invoiceNumber}</h1>
             <div className="flex items-center gap-3 print:hidden">
               <InvoiceStatus aria-label="Status" invoice={invoice} />
               {user.roles.administrator && isActionable(invoice) ? (

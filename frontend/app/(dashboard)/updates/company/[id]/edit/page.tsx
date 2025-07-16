@@ -3,7 +3,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";
-import EditPage from "../../Edit";
+import EditPage from "@/app/(dashboard)/updates/company/Edit";
 
 export default function Edit() {
   const company = useCurrentCompany();
