@@ -2,11 +2,11 @@
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useParams } from "next/navigation";
 import React from "react";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import MutationButton from "@/components/MutationButton";
 import RichText from "@/components/RichText";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";
-import { DashboardHeader } from "@/components/DashboardHeader";
 
 function View() {
   const company = useCurrentCompany();
