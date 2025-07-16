@@ -10,6 +10,7 @@ import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 type InvestorEntity = RouterOutput["investorEntities"]["get"];
 type ShareHolding = InvestorEntity["shares"][number];
@@ -27,13 +28,7 @@ export default function InvestorEntityPage() {
 
   return (
     <>
-      <header className="pt-2 md:pt-4">
-        <div className="grid gap-y-8">
-          <div className="flex items-center justify-between gap-3">
-            <h1 className="text-sm font-bold">{data.name}</h1>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader title={data.name} />
 
       <Tabs links={tabs.map((tab) => ({ label: tab.label, route: `?tab=${tab.tab}` }))} />
       {selectedTab === "shares" ? <SharesTab shares={data.shares} /> : <OptionsTab grants={data.grants} />}

@@ -45,7 +45,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useCurrentCompany, useCurrentUser, useUserStore } from "@/global";
 import defaultCompanyLogo from "@/images/default-company-logo.svg";
@@ -152,9 +151,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <SidebarInset>
         <div className="flex flex-col not-print:h-screen not-print:overflow-hidden">
           <main className="flex flex-1 flex-col pb-4 not-print:overflow-y-auto">
-            <div className="px-3 py-2 md:hidden">
-              <SidebarTrigger />
-            </div>
             <div className="mx-3 flex flex-col gap-6">{children}</div>
           </main>
         </div>

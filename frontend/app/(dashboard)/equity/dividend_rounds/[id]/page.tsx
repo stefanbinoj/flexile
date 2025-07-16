@@ -9,6 +9,7 @@ import { useCurrentCompany } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoneyFromCents } from "@/utils/formatMoney";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 type Dividend = RouterOutput["dividends"]["list"][number];
 const rowLink = (row: Dividend) => `/people/${row.investor.user.id}?tab=dividends` as const;
@@ -43,13 +44,7 @@ export default function DividendRound() {
 
   return (
     <>
-      <header className="pt-2 md:pt-4">
-        <div className="grid gap-y-8">
-          <div className="grid items-center justify-between gap-3 md:flex">
-            <h1 className="text-sm font-bold">Dividends</h1>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader title="Dividends" />
       <DataTable table={table} onRowClicked={(row) => router.push(rowLink(row))} />
     </>
   );

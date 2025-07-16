@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { useCurrentCompany, useCurrentUser } from "@/global";
 import { trpc } from "@/trpc/client";
 import { formatDate } from "@/utils/time";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 const useData = () => {
   const company = useCurrentCompany();
@@ -27,20 +28,16 @@ export default function CompanyUpdates() {
 
   return (
     <>
-      <header className="pt-2 md:pt-4">
-        <div className="grid gap-y-8">
-          <div className="flex items-center justify-between gap-3">
-            <h1 className="text-sm font-bold">Updates</h1>
-            <div className="flex items-center gap-3 print:hidden">
-              {user.roles.administrator ? (
-                <Button asChild>
-                  <Link href="/updates/company/new">New update</Link>
-                </Button>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader
+        title="Updates"
+        headerAction={
+          user.roles.administrator ? (
+            <Button asChild>
+              <Link href="/updates/company/new">New update</Link>
+            </Button>
+          ) : null
+        }
+      />
 
       {isLoading ? (
         <TableSkeleton columns={4} />

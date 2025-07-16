@@ -38,6 +38,7 @@ import type { RouterOutput } from "@/trpc";
 import { DocumentTemplateType, DocumentType, trpc } from "@/trpc/client";
 import { assertDefined } from "@/utils/assert";
 import { formatDate } from "@/utils/time";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 type Document = RouterOutput["documents"]["list"][number];
 type SignableDocument = Document & { docusealSubmissionId: number };
@@ -341,22 +342,20 @@ export default function DocumentsPage() {
 
   return (
     <>
-      <header className="pt-2 md:pt-4">
-        <div className="grid gap-y-8">
-          <div className="flex items-center justify-between gap-3">
-            <h1 className="text-sm font-bold">Documents</h1>
-            <div className="flex items-center gap-3 print:hidden">
-              {isCompanyRepresentative && documents.length === 0 ? <EditTemplates /> : null}
-              {user.roles.administrator && company.flags.includes("lawyers") ? (
-                <Button onClick={() => setShowInviteModal(true)}>
-                  <BriefcaseBusiness className="size-4" />
-                  Invite lawyer
-                </Button>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader
+        title="Documents"
+        headerAction={
+          <>
+            {isCompanyRepresentative && documents.length === 0 ? <EditTemplates /> : null}
+            {user.roles.administrator && company.flags.includes("lawyers") ? (
+              <Button onClick={() => setShowInviteModal(true)}>
+                <BriefcaseBusiness className="size-4" />
+                Invite lawyer
+              </Button>
+            ) : null}
+          </>
+        }
+      />
 
       <div className="grid gap-4">
         {canSign ? null : (

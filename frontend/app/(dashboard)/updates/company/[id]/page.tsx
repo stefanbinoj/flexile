@@ -6,6 +6,7 @@ import MutationButton from "@/components/MutationButton";
 import RichText from "@/components/RichText";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 function View() {
   const company = useCurrentCompany();
@@ -18,23 +19,17 @@ function View() {
 
   return (
     <>
-      <header className="pt-2 md:pt-4">
-        <div className="grid gap-y-8">
-          <div className="flex items-center justify-between gap-3">
-            <h1 className="text-sm font-bold">
-              {update.sentAt ? "" : "Previewing:"} {update.title}
-            </h1>
-            <div className="flex items-center gap-3 print:hidden">
-              {!update.sentAt && (
-                <MutationButton loadingText="Sending..." mutation={sendTestEmail} param={{ companyId: company.id, id }}>
-                  <EnvelopeIcon className="size-4" />
-                  Send test email
-                </MutationButton>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader
+        title={update.sentAt ? "" : "Previewing:" + update.title}
+        headerAction={
+          !update.sentAt && (
+            <MutationButton loadingText="Sending..." mutation={sendTestEmail} param={{ companyId: company.id, id }}>
+              <EnvelopeIcon className="size-4" />
+              Send test email
+            </MutationButton>
+          )
+        }
+      />
 
       <RichText content={update.body} />
 

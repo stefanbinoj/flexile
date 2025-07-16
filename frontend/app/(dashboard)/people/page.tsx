@@ -26,7 +26,8 @@ import { useCurrentCompany } from "@/global";
 import { countries } from "@/models/constants";
 import { DocumentTemplateType, PayRateType, trpc } from "@/trpc/client";
 import { formatDate } from "@/utils/time";
-import FormFields, { schema as formSchema } from "./FormFields";
+import FormFields, { schema as formSchema } from "@/app/(dashboard)/people/FormFields";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 const schema = formSchema.extend({
   email: z.string().email(),
@@ -131,21 +132,17 @@ export default function PeoplePage() {
 
   return (
     <>
-      <header className="pt-2 md:pt-4">
-        <div className="grid gap-y-8">
-          <div className="flex items-center justify-between gap-3">
-            <h1 className="text-sm font-bold">People</h1>
-            <div className="flex items-center gap-3 print:hidden">
-              {workers.length === 0 ? (
-                <Button size="small" variant="outline" onClick={() => setShowInviteModal(true)}>
-                  <UserPlus className="size-4" />
-                  Invite contractor
-                </Button>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader
+        title="People"
+        headerAction={
+          workers.length === 0 ? (
+            <Button size="small" variant="outline" onClick={() => setShowInviteModal(true)}>
+              <UserPlus className="size-4" />
+              Invite contractor
+            </Button>
+          ) : null
+        }
+      />
 
       {isLoading ? (
         <TableSkeleton columns={4} />

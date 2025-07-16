@@ -64,6 +64,7 @@ import { formatDate } from "@/utils/time";
 import EquityPercentageLockModal from "./EquityPercentageLockModal";
 import QuantityInput from "./QuantityInput";
 import { useCanSubmitInvoices } from ".";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 const statusNames = {
   received: "Awaiting approval",
@@ -334,23 +335,19 @@ export default function InvoicesPage() {
 
   return (
     <>
-      <header className="pt-2 md:pt-4">
-        <div className="grid gap-y-8">
-          <div className="flex items-center justify-between gap-3">
-            <h1 className="text-sm font-bold">Invoices</h1>
-            <div className="flex items-center gap-3 print:hidden">
-              {user.roles.worker ? (
-                <Button asChild variant="outline" size="small" disabled={!canSubmitInvoices}>
-                  <Link href="/invoices/new" inert={!canSubmitInvoices}>
-                    <Plus className="size-4" />
-                    New invoice
-                  </Link>
-                </Button>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader
+        title="Invoices"
+        headerAction={
+          user.roles.worker ? (
+            <Button asChild variant="outline" size="small" disabled={!canSubmitInvoices}>
+              <Link href="/invoices/new" inert={!canSubmitInvoices}>
+                <Plus className="size-4" />
+                New invoice
+              </Link>
+            </Button>
+          ) : null
+        }
+      />
 
       <div className="grid gap-4">
         {workerNotice ? (

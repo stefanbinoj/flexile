@@ -24,15 +24,9 @@ import { trpc } from "@/trpc/client";
 import { formatMoney } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
 import { navLinks } from "@/app/(dashboard)/equity";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-type EquityGrant = RouterOutput["equityGrants"]["list"][number];
+import { DashboardHeader } from "@/components/DashboardHeader";
 
+type EquityGrant = RouterOutput["equityGrants"]["list"][number];
 export default function GrantsPage() {
   const router = useRouter();
   const company = useCurrentCompany();
@@ -90,33 +84,21 @@ export default function GrantsPage() {
   return (
     <>
       {!!currentLink && (
-        <header className="pt-2 md:pt-4">
-          <div className="grid gap-y-8">
-            <div className="flex items-center justify-between gap-3">
-              <h1 className="text-sm font-bold">
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem>Equity</BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>{currentLink.label}</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
-              </h1>
-              <div className="flex items-center gap-3 print:hidden">
-                {equityPlanContractTemplates.length > 0 ? (
-                  <Button asChild>
-                    <Link href={`/companies/${company.id}/administrator/equity_grants/new`}>
-                      <Pencil className="size-4" />
-                      New option grant
-                    </Link>
-                  </Button>
-                ) : null}
-              </div>
-            </div>
-          </div>
-        </header>
+        <DashboardHeader
+          title={"Equity"}
+          showBreadcrumb
+          breadcrumbLinks={{ label: currentLink.label, href: currentLink.route }}
+          headerAction={
+            equityPlanContractTemplates.length > 0 ? (
+              <Button asChild>
+                <Link href={`/companies/${company.id}/administrator/equity_grants/new`}>
+                  <Pencil className="size-4" />
+                  New option grant
+                </Link>
+              </Button>
+            ) : null
+          }
+        />
       )}
 
       {equityPlanContractTemplates.length === 0 ? (

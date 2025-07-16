@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useCurrentCompany } from "@/global";
 import { DocumentTemplateType, trpc } from "@/trpc/client";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 const templateSchema = z.object({
   name: z.string(),
@@ -146,23 +147,17 @@ export default function EditTemplatePage() {
 
   return (
     <>
-      <header className="pt-2 md:pt-4">
-        <div className="grid gap-y-8">
-          <div className="flex items-center justify-between gap-3">
-            <h1 className="text-sm font-bold">
-              {template.companyId !== null ? `${id ? "Edit" : "New"} ${template.name}` : `Default ${template.name}`}
-            </h1>
-            <div className="flex items-center gap-3 print:hidden">
-              <Button variant="outline" asChild>
-                <Link href="/documents">
-                  <ArrowLeftIcon className="size-4" />
-                  Back to documents
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader
+        title={template.companyId !== null ? `${id ? "Edit" : "New"} ${template.name}` : `Default ${template.name}`}
+        headerAction={
+          <Button variant="outline" asChild>
+            <Link href="/documents">
+              <ArrowLeftIcon className="size-4" />
+              Back to documents
+            </Link>
+          </Button>
+        }
+      />
 
       <div className="grid gap-6">
         {template.companyId === null ? (

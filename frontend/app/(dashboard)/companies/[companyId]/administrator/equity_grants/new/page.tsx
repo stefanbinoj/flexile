@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import {
   optionGrantTypeDisplayNames,
   relationshipDisplayNames,
@@ -28,6 +27,7 @@ import {
 } from "@/db/enums";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 const MAX_VESTING_DURATION_IN_MONTHS = 120;
 
@@ -182,18 +182,14 @@ export default function NewEquityGrant() {
 
   return (
     <>
-      <header className="pt-2 md:pt-4">
-        <div className="grid gap-y-8">
-          <div className="flex items-center justify-between gap-3">
-            <h1 className="text-sm font-bold">Create option grant</h1>
-            <div className="flex items-center gap-3 print:hidden">
-              <Button variant="outline" asChild>
-                <Link href="/equity/grants">Cancel</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader
+        title="Create option grant"
+        headerAction={
+          <Button variant="outline" asChild>
+            <Link href="/equity/grants">Cancel</Link>
+          </Button>
+        }
+      />
 
       <Form {...form}>
         <form onSubmit={(e) => void submit(e)} className="grid gap-6">

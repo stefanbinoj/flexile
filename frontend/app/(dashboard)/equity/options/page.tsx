@@ -13,13 +13,6 @@ import MutationButton from "@/components/MutationButton";
 import Placeholder from "@/components/Placeholder";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { useCurrentCompany, useCurrentUser } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
@@ -27,6 +20,7 @@ import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
 import { pluralize } from "@/utils/pluralize";
 import { request } from "@/utils/request";
 import { resend_company_equity_grant_exercise_path } from "@/utils/routes";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 const pluralizeGrants = (number: number) => `${number} ${pluralize("stock option grant", number)}`;
 
@@ -106,23 +100,11 @@ export default function OptionsPage() {
   return (
     <>
       {!!currentLink && (
-        <header className="pt-2 md:pt-4">
-          <div className="grid gap-y-8">
-            <div className="grid items-center justify-between gap-3 md:flex">
-              <h1 className="text-sm font-bold">
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem>Equity</BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>{currentLink.label}</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
-              </h1>
-            </div>
-          </div>
-        </header>
+        <DashboardHeader
+          title={"Equity"}
+          showBreadcrumb
+          breadcrumbLinks={{ label: currentLink.label, href: currentLink.route }}
+        />
       )}
       {data.length === 0 ? (
         <Placeholder icon={CircleCheck}>You don't have any option grants right now.</Placeholder>

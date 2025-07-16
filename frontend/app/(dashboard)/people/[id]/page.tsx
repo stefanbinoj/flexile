@@ -39,6 +39,7 @@ import { request } from "@/utils/request";
 import { approve_company_invoices_path, company_equity_exercise_payment_path } from "@/utils/routes";
 import { formatDate } from "@/utils/time";
 import FormFields, { schema as formSchema } from "../FormFields";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 const issuePaymentSchema = z.object({
   amountInCents: z.number().min(0),
@@ -171,27 +172,23 @@ export default function ContractorPage() {
 
   return (
     <>
-      <header className="pt-2 md:pt-4">
-        <div className="grid gap-y-8">
-          <div className="flex items-center justify-between gap-3">
-            <h1 className="text-sm font-bold">{user.displayName}</h1>
-            <div className="flex items-center gap-3 print:hidden">
-              {contractor ? (
-                <div className="flex items-center gap-3">
-                  <Button onClick={() => setIssuePaymentModalOpen(true)}>Issue payment</Button>
-                  {contractor.endedAt && !isFuture(contractor.endedAt) ? (
-                    <Status variant="critical">Alumni</Status>
-                  ) : !contractor.endedAt || isFuture(contractor.endedAt) ? (
-                    <Button variant="outline" onClick={() => setEndModalOpen(true)}>
-                      End contract
-                    </Button>
-                  ) : null}
-                </div>
+      <DashboardHeader
+        title={user.displayName}
+        headerAction={
+          contractor ? (
+            <div className="flex items-center gap-3">
+              <Button onClick={() => setIssuePaymentModalOpen(true)}>Issue payment</Button>
+              {contractor.endedAt && !isFuture(contractor.endedAt) ? (
+                <Status variant="critical">Alumni</Status>
+              ) : !contractor.endedAt || isFuture(contractor.endedAt) ? (
+                <Button variant="outline" onClick={() => setEndModalOpen(true)}>
+                  End contract
+                </Button>
               ) : null}
             </div>
-          </div>
-        </div>
-      </header>
+          ) : null
+        }
+      />
 
       <Dialog open={endModalOpen} onOpenChange={setEndModalOpen}>
         <DialogContent>
