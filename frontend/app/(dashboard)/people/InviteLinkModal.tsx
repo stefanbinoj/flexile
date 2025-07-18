@@ -3,7 +3,7 @@ import { Copy } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import TemplateSelector from "@/app/document_templates/TemplateSelector";
+import TemplateSelector from "@/app/(dashboard)/document_templates/TemplateSelector";
 import CopyButton from "@/components/CopyButton";
 import { MutationStatusButton } from "@/components/MutationButton";
 import { Button } from "@/components/ui/button";
