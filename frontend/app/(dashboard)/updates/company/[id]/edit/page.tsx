@@ -1,9 +1,9 @@
 "use client";
 import { useParams } from "next/navigation";
 import React from "react";
+import EditPage from "@/app/(dashboard)/updates/company/Edit";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";
-import EditPage from "@/app/(dashboard)/updates/company/Edit";
 
 export default function Edit() {
   const company = useCurrentCompany();

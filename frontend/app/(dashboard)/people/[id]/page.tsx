@@ -16,6 +16,7 @@ import DividendStatusIndicator from "@/app/(dashboard)/equity/DividendStatusIndi
 import EquityGrantExerciseStatusIndicator from "@/app/(dashboard)/equity/EquityGrantExerciseStatusIndicator";
 import DetailsModal from "@/app/(dashboard)/equity/grants/DetailsModal";
 import CopyButton from "@/components/CopyButton";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import DatePicker from "@/components/DatePicker";
 import MutationButton, { MutationStatusButton } from "@/components/MutationButton";
@@ -39,7 +40,6 @@ import { request } from "@/utils/request";
 import { approve_company_invoices_path, company_equity_exercise_payment_path } from "@/utils/routes";
 import { formatDate } from "@/utils/time";
 import FormFields, { schema as formSchema } from "../FormFields";
-import { DashboardHeader } from "@/components/DashboardHeader";
 
 const issuePaymentSchema = z.object({
   amountInCents: z.number().min(0),

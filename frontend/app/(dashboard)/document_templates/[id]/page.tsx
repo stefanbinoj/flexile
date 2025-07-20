@@ -6,12 +6,12 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import MutationButton from "@/components/MutationButton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useCurrentCompany } from "@/global";
 import { DocumentTemplateType, trpc } from "@/trpc/client";
-import { DashboardHeader } from "@/components/DashboardHeader";
 
 const templateSchema = z.object({
   name: z.string(),

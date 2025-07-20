@@ -7,6 +7,7 @@ import { CircleAlert, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import React, { Fragment, useMemo, useState } from "react";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import { linkClasses } from "@/components/Link";
 import MutationButton from "@/components/MutationButton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -33,7 +34,6 @@ import {
   useIsDeletable,
 } from "..";
 import InvoiceStatus, { StatusDetails } from "../Status";
-import { DashboardHeader } from "@/components/DashboardHeader";
 
 export default function InvoicePage() {
   const { id } = useParams<{ id: string }>();

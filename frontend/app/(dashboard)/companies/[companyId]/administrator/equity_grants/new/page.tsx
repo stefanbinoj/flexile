@@ -7,14 +7,15 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import TemplateSelector from "@/app/(dashboard)/document_templates/TemplateSelector";
 import {
   optionGrantTypeDisplayNames,
   relationshipDisplayNames,
   vestingTriggerDisplayNames,
 } from "@/app/(dashboard)/equity/grants";
-import TemplateSelector from "@/app/(dashboard)/document_templates/TemplateSelector";
-import DatePicker from "@/components/DatePicker";
 import ComboBox from "@/components/ComboBox";
+import { DashboardHeader } from "@/components/DashboardHeader";
+import DatePicker from "@/components/DatePicker";
 import { MutationStatusButton } from "@/components/MutationButton";
 import NumberInput from "@/components/NumberInput";
 import { Button } from "@/components/ui/button";
@@ -27,7 +28,6 @@ import {
 } from "@/db/enums";
 import { useCurrentCompany } from "@/global";
 import { trpc } from "@/trpc/client";
-import { DashboardHeader } from "@/components/DashboardHeader";
 
 const MAX_VESTING_DURATION_IN_MONTHS = 120;
 
@@ -338,7 +338,7 @@ export default function NewEquityGrant() {
                     <ComboBox
                       {...field}
                       options={Object.entries(vestingTriggerDisplayNames).map(([key, value]) => ({
-                        label: value as string,
+                        label: value,
                         value: key,
                       }))}
                       placeholder="Select an option"

@@ -7,10 +7,19 @@ import { forbidden } from "next/navigation";
 import { useState } from "react";
 import DetailsModal from "@/app/(dashboard)/equity/grants/DetailsModal";
 import ExerciseModal from "@/app/(dashboard)/equity/grants/ExerciseModal";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import MutationButton from "@/components/MutationButton";
 import Placeholder from "@/components/Placeholder";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { useCurrentCompany, useCurrentUser } from "@/global";
 import type { RouterOutput } from "@/trpc";
@@ -19,15 +28,6 @@ import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
 import { pluralize } from "@/utils/pluralize";
 import { request } from "@/utils/request";
 import { resend_company_equity_grant_exercise_path } from "@/utils/routes";
-import { DashboardHeader } from "@/components/DashboardHeader";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 
 const pluralizeGrants = (number: number) => `${number} ${pluralize("stock option grant", number)}`;
 

@@ -1,5 +1,4 @@
 import { DocusealForm } from "@docuseal/react";
-import type { ComponentProps } from "react";
 import { useCurrentUser } from "@/global";
 
 // Define and export the centralized custom CSS

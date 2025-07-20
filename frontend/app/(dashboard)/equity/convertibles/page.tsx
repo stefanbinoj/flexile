@@ -2,14 +2,10 @@
 
 import { CircleCheck } from "lucide-react";
 import React from "react";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
-import { useCurrentCompany, useCurrentUser } from "@/global";
-import type { RouterOutput } from "@/trpc";
-import { trpc } from "@/trpc/client";
-import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
-import { formatDate } from "@/utils/time";
-import { DashboardHeader } from "@/components/DashboardHeader";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,7 +13,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
+import { useCurrentCompany, useCurrentUser } from "@/global";
+import type { RouterOutput } from "@/trpc";
+import { trpc } from "@/trpc/client";
+import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
+import { formatDate } from "@/utils/time";
 
 const columnHelper =
   createColumnHelper<RouterOutput["convertibleSecurities"]["list"]["convertibleSecurities"][number]>();

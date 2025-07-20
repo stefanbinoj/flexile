@@ -1,14 +1,11 @@
 "use client";
 import { CircleCheck } from "lucide-react";
 import React from "react";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
 import TableSkeleton from "@/components/TableSkeleton";
-import { Progress } from "@/components/ui/progress";
-import { useCurrentCompany } from "@/global";
-import type { RouterOutput } from "@/trpc";
-import { trpc } from "@/trpc/client";
-import { DashboardHeader } from "@/components/DashboardHeader";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,7 +13,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
+import { Progress } from "@/components/ui/progress";
+import { useCurrentCompany } from "@/global";
+import type { RouterOutput } from "@/trpc";
+import { trpc } from "@/trpc/client";
 
 type OptionPool = RouterOutput["optionPools"]["list"][number];
 

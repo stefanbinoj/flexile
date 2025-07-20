@@ -37,6 +37,7 @@ import StripeMicrodepositVerification from "@/app/settings/administrator/StripeM
 import { ContextMenuActions } from "@/components/actions/ContextMenuActions";
 import { SelectionActions } from "@/components/actions/SelectionActions";
 import type { ActionConfig, ActionContext } from "@/components/actions/types";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import DatePicker from "@/components/DatePicker";
 import { linkClasses } from "@/components/Link";
@@ -64,7 +65,6 @@ import { formatDate } from "@/utils/time";
 import EquityPercentageLockModal from "./EquityPercentageLockModal";
 import QuantityInput from "./QuantityInput";
 import { useCanSubmitInvoices } from ".";
-import { DashboardHeader } from "@/components/DashboardHeader";
 
 const statusNames = {
   received: "Awaiting approval",

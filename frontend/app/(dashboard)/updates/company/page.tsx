@@ -3,6 +3,7 @@ import { ArrowRight, CircleCheck, Trash } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import MutationButton from "@/components/MutationButton";
 import Placeholder from "@/components/Placeholder";
@@ -14,7 +15,6 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { useCurrentCompany, useCurrentUser } from "@/global";
 import { trpc } from "@/trpc/client";
 import { formatDate } from "@/utils/time";
-import { DashboardHeader } from "@/components/DashboardHeader";
 
 const useData = () => {
   const company = useCurrentCompany();

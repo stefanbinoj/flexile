@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Decimal } from "decimal.js";
 import { Fragment, useId, useState } from "react";
 import { z } from "zod";
+import Form, { customCss } from "@/app/(dashboard)/documents/DocusealForm";
 import Delta from "@/components/Delta";
 import RangeInput from "@/components/RangeInput";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,6 @@ import { assertDefined } from "@/utils/assert";
 import { formatMoney } from "@/utils/formatMoney";
 import { request } from "@/utils/request";
 import { company_equity_grant_exercises_path } from "@/utils/routes";
-import Form, { customCss } from "@/app/(dashboard)/documents/DocusealForm";
 
 type EquityGrant = RouterOutput["equityGrants"]["list"][number];
 

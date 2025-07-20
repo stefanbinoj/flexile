@@ -2,11 +2,20 @@
 import { CircleCheck } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 import CopyButton from "@/components/CopyButton";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { linkClasses } from "@/components/Link";
 import Placeholder from "@/components/Placeholder";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { useCurrentCompany, useCurrentUser } from "@/global";
 import {
   fetchInvestorEmail,
@@ -18,15 +27,6 @@ import {
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatOwnershipPercentage } from "@/utils/numbers";
-import { DashboardHeader } from "@/components/DashboardHeader";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 
 type Data = RouterOutput["capTable"]["show"];
 

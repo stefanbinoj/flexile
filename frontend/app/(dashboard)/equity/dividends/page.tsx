@@ -5,6 +5,8 @@ import Link from "next/link";
 import React, { useMemo, useState } from "react";
 import { z } from "zod";
 import DividendStatusIndicator from "@/app/(dashboard)/equity/DividendStatusIndicator";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { linkClasses } from "@/components/Link";
 import MutationButton from "@/components/MutationButton";
@@ -12,6 +14,13 @@ import Placeholder from "@/components/Placeholder";
 import RichText from "@/components/RichText";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -30,15 +39,6 @@ import { formatMoneyFromCents } from "@/utils/formatMoney";
 import { request } from "@/utils/request";
 import { company_dividend_path, sign_company_dividend_path } from "@/utils/routes";
 import { formatDate } from "@/utils/time";
-import { DashboardHeader } from "@/components/DashboardHeader";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 
 type Dividend = RouterOutput["dividends"]["list"][number];
 const columnHelper = createColumnHelper<Dividend>();

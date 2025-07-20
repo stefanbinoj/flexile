@@ -11,6 +11,7 @@ import { redirect, useParams, useRouter, useSearchParams } from "next/navigation
 import React, { useEffect, useId, useRef, useState } from "react";
 import { z } from "zod";
 import ComboBox from "@/components/ComboBox";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import DatePicker from "@/components/DatePicker";
 import NumberInput from "@/components/NumberInput";
 import RangeInput from "@/components/RangeInput";
@@ -36,7 +37,6 @@ import {
 } from "@/utils/routes";
 import QuantityInput from "./QuantityInput";
 import { LegacyAddress as Address, useCanSubmitInvoices } from ".";
-import { DashboardHeader } from "@/components/DashboardHeader";
 
 const addressSchema = z.object({
   street_address: z.string(),

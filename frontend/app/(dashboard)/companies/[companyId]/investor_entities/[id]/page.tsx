@@ -2,6 +2,7 @@
 import { CircleCheck } from "lucide-react";
 import { useParams } from "next/navigation";
 import { parseAsString, useQueryState } from "nuqs";
+import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
 import Tabs from "@/components/Tabs";
@@ -10,7 +11,6 @@ import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
-import { DashboardHeader } from "@/components/DashboardHeader";
 
 type InvestorEntity = RouterOutput["investorEntities"]["get"];
 type ShareHolding = InvestorEntity["shares"][number];
