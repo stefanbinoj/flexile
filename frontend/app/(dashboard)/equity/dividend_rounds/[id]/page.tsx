@@ -44,7 +44,7 @@ export default function DividendRound() {
 
   return (
     <>
-      <DashboardHeader title="Dividends" />
+      <DashboardHeader title="Dividend" />
       <DataTable table={table} onRowClicked={(row) => router.push(rowLink(row))} />
     </>
   );
