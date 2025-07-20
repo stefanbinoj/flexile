@@ -5,7 +5,6 @@ import Link from "next/link";
 import React, { useMemo, useState } from "react";
 import { z } from "zod";
 import DividendStatusIndicator from "@/app/(dashboard)/equity/DividendStatusIndicator";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { linkClasses } from "@/components/Link";
@@ -123,7 +122,6 @@ export default function Dividends() {
     [],
   );
   const table = useTable({ columns, data });
-  const { currentLink } = useNavLinks();
   return (
     <>
       <DashboardHeader
@@ -133,7 +131,7 @@ export default function Dividends() {
               <BreadcrumbItem>Equity</BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+                <BreadcrumbPage>Dividends</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

@@ -3,7 +3,6 @@ import { CircleCheck, Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
@@ -39,7 +38,6 @@ export default function Buybacks() {
   ];
 
   const table = useTable({ columns, data });
-  const { currentLink } = useNavLinks();
 
   return (
     <>
@@ -50,7 +48,7 @@ export default function Buybacks() {
               <BreadcrumbItem>Equity</BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+                <BreadcrumbPage>Buybacks</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

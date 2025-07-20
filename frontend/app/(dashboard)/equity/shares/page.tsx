@@ -1,7 +1,6 @@
 "use client";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import React from "react";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
@@ -37,7 +36,6 @@ export default function Shares() {
   });
 
   const table = useTable({ data: shareHoldings, columns });
-  const { currentLink } = useNavLinks();
 
   return (
     <>
@@ -48,7 +46,7 @@ export default function Shares() {
               <BreadcrumbItem>Equity</BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+                <BreadcrumbPage>Shares</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

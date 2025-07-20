@@ -38,8 +38,7 @@
     "trpc/**/*.ts",
     ".next/types/**/*.ts",
     "types.d.ts",
-    "middleware.ts",
-    "app/**/hooks/**/*.ts"
+    "middleware.ts"
   ],
   "exclude": ["node_modules"]
 }

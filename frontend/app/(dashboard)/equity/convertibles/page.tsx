@@ -2,7 +2,6 @@
 
 import { CircleCheck } from "lucide-react";
 import React from "react";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
@@ -37,7 +36,6 @@ export default function Convertibles() {
   });
 
   const table = useTable({ columns, data: data.convertibleSecurities });
-  const { currentLink } = useNavLinks();
 
   return (
     <>
@@ -48,7 +46,7 @@ export default function Convertibles() {
               <BreadcrumbItem>Equity</BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+                <BreadcrumbPage>Convertibles</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

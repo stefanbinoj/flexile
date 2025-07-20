@@ -3,7 +3,6 @@ import { CircleCheck } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
@@ -42,7 +41,6 @@ export default function DividendRounds() {
   const { data: dividendRounds = [], isLoading } = trpc.dividendRounds.list.useQuery({ companyId: company.id });
 
   const table = useTable({ columns, data: dividendRounds });
-  const { currentLink } = useNavLinks();
 
   return (
     <>
@@ -53,7 +51,7 @@ export default function DividendRounds() {
               <BreadcrumbItem>Equity</BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+                <BreadcrumbPage>Dividends</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

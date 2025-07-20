@@ -3,7 +3,6 @@ import { CircleAlert, CircleCheck, Info, Pencil } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { linkClasses } from "@/components/Link";
@@ -85,7 +84,6 @@ export default function GrantsPage() {
     type: DocumentTemplateType.EquityPlanContract,
     signable: true,
   });
-  const { currentLink } = useNavLinks();
 
   return (
     <>
@@ -96,7 +94,7 @@ export default function GrantsPage() {
               <BreadcrumbItem>Equity</BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+                <BreadcrumbPage>Equity grants</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

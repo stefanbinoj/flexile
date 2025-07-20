@@ -2,7 +2,6 @@
 import { CircleCheck } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 import CopyButton from "@/components/CopyButton";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
@@ -165,7 +164,6 @@ export default function CapTable() {
   );
 
   const shareClassesTable = useTable({ data: shareClassesData, columns: shareClassesColumns });
-  const { currentLink } = useNavLinks();
   return (
     <>
       <DashboardHeader
@@ -175,7 +173,7 @@ export default function CapTable() {
               <BreadcrumbItem>Equity</BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+                <BreadcrumbPage>Cap table</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

@@ -1,7 +1,6 @@
 "use client";
 import { CircleCheck } from "lucide-react";
 import React from "react";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
@@ -39,7 +38,6 @@ export default function OptionPools() {
   const { data = [], isLoading } = trpc.optionPools.list.useQuery({ companyId: company.id });
 
   const table = useTable({ columns, data });
-  const { currentLink } = useNavLinks();
 
   return (
     <>
@@ -50,7 +48,7 @@ export default function OptionPools() {
               <BreadcrumbItem>Equity</BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+                <BreadcrumbPage>Option pools</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>

@@ -7,7 +7,6 @@ import { forbidden } from "next/navigation";
 import { useState } from "react";
 import DetailsModal from "@/app/(dashboard)/equity/grants/DetailsModal";
 import ExerciseModal from "@/app/(dashboard)/equity/grants/ExerciseModal";
-import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import MutationButton from "@/components/MutationButton";
@@ -101,7 +100,6 @@ export default function OptionsPage() {
     },
     onSuccess: () => setTimeout(() => resendPaymentInstructions.reset(), 5000),
   });
-  const { currentLink } = useNavLinks();
 
   return (
     <>
@@ -112,7 +110,7 @@ export default function OptionsPage() {
               <BreadcrumbItem>Equity</BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+                <BreadcrumbPage>Options</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
