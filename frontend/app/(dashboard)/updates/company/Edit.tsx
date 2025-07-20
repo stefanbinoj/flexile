@@ -151,7 +151,6 @@ const Edit = ({ update }: { update?: CompanyUpdate }) => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <div className="hidden h-6 flex-col gap-2 lg:flex" />
             <div className="mb-1 text-xs text-gray-500 uppercase">Recipients ({recipientCount.toLocaleString()})</div>
             {company.investorCount ? (
               <div className="flex items-center gap-2">
