@@ -174,7 +174,7 @@ export default function ContractorPage() {
     <>
       <DashboardHeader
         title={user.displayName}
-        headerAction={
+        headerActions={
           contractor ? (
             <div className="flex items-center gap-3">
               <Button onClick={() => setIssuePaymentModalOpen(true)}>Issue payment</Button>

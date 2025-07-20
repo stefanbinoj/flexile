@@ -1,18 +1,25 @@
 "use client";
 import { CircleCheck } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
 import TableSkeleton from "@/components/TableSkeleton";
-import { useCurrentCompany, useCurrentUser } from "@/global";
+import { useCurrentCompany } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
-import { navLinks } from "@/app/(dashboard)/equity";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 
 type DividendRound = RouterOutput["dividendRounds"]["list"][number];
 const columnHelper = createColumnHelper<DividendRound>();
@@ -34,20 +41,24 @@ export default function DividendRounds() {
   const router = useRouter();
   const { data: dividendRounds = [], isLoading } = trpc.dividendRounds.list.useQuery({ companyId: company.id });
 
-  const user = useCurrentUser();
-  const pathname = usePathname();
   const table = useTable({ columns, data: dividendRounds });
-  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
+  const { currentLink } = useNavLinks();
 
   return (
     <>
-      {!!currentLink && (
-        <DashboardHeader
-          title={"Equity"}
-          showBreadcrumb
-          breadcrumbLinks={{ label: currentLink.label, href: currentLink.route }}
-        />
-      )}
+      <DashboardHeader
+        title={
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>Equity</BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        }
+      />
       {isLoading ? (
         <TableSkeleton columns={3} />
       ) : dividendRounds.length > 0 ? (

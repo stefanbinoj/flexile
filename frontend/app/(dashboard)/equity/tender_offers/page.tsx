@@ -1,7 +1,7 @@
 "use client";
 import { CircleCheck, Plus } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import Placeholder from "@/components/Placeholder";
@@ -12,14 +12,20 @@ import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoney } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
-import { navLinks } from "@/app/(dashboard)/equity";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 
 export default function Buybacks() {
   const company = useCurrentCompany();
   const router = useRouter();
   const user = useCurrentUser();
-  const pathname = usePathname();
   const { data = [], isLoading } = trpc.tenderOffers.list.useQuery({ companyId: company.id });
 
   const columnHelper = createColumnHelper<RouterOutput["tenderOffers"]["list"][number]>();
@@ -33,27 +39,33 @@ export default function Buybacks() {
   ];
 
   const table = useTable({ columns, data });
-  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
+  const { currentLink } = useNavLinks();
 
   return (
     <>
-      {!!currentLink && (
-        <DashboardHeader
-          title={"Equity"}
-          showBreadcrumb
-          breadcrumbLinks={{ label: currentLink.label, href: currentLink.route }}
-          headerAction={
-            user.roles.administrator ? (
-              <Button asChild size="small" variant="outline">
-                <Link href="/equity/tender_offers/new">
-                  <Plus className="size-4" />
-                  New buyback
-                </Link>
-              </Button>
-            ) : null
-          }
-        />
-      )}
+      <DashboardHeader
+        title={
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>Equity</BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        }
+        headerActions={
+          user.roles.administrator ? (
+            <Button asChild size="small" variant="outline">
+              <Link href="/equity/tender_offers/new">
+                <Plus className="size-4" />
+                New buyback
+              </Link>
+            </Button>
+          ) : null
+        }
+      />
 
       {isLoading ? (
         <TableSkeleton columns={3} />

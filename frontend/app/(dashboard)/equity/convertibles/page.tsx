@@ -1,4 +1,5 @@
 "use client";
+
 import { CircleCheck } from "lucide-react";
 import React from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
@@ -8,9 +9,15 @@ import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoney, formatMoneyFromCents } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
-import { navLinks } from "@/app/(dashboard)/equity";
-import { usePathname } from "next/navigation";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 
 const columnHelper =
   createColumnHelper<RouterOutput["convertibleSecurities"]["list"]["convertibleSecurities"][number]>();
@@ -24,24 +31,29 @@ const columns = [
 export default function Convertibles() {
   const company = useCurrentCompany();
   const user = useCurrentUser();
-  const pathname = usePathname();
   const [data] = trpc.convertibleSecurities.list.useSuspenseQuery({
     companyId: company.id,
     investorId: user.roles.investor?.id ?? "",
   });
 
   const table = useTable({ columns, data: data.convertibleSecurities });
-  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
+  const { currentLink } = useNavLinks();
 
   return (
     <>
-      {!!currentLink && (
-        <DashboardHeader
-          title={"Equity"}
-          showBreadcrumb
-          breadcrumbLinks={{ label: currentLink.label, href: currentLink.route }}
-        />
-      )}
+      <DashboardHeader
+        title={
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>Equity</BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        }
+      />
       {data.convertibleSecurities.length > 0 ? (
         <DataTable table={table} />
       ) : (

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/16/solid";
 import { EnvelopeIcon, UsersIcon } from "@heroicons/react/24/outline";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,6 +18,7 @@ import { useCurrentCompany } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { pluralize } from "@/utils/pluralize";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 const formSchema = z.object({
   title: z.string().trim().min(1, "This field is required."),
@@ -27,6 +28,7 @@ const formSchema = z.object({
 
 type CompanyUpdate = RouterOutput["companyUpdates"]["get"];
 const Edit = ({ update }: { update?: CompanyUpdate }) => {
+  const { id } = useParams<{ id?: string }>();
   const company = useCurrentCompany();
   const router = useRouter();
   const trpcUtils = trpc.useUtils();
@@ -74,33 +76,38 @@ const Edit = ({ update }: { update?: CompanyUpdate }) => {
 
   return (
     <Form {...form}>
-      <form className="relative" onSubmit={(e) => void submit(e)}>
-        <div className="absolute top-0 right-0 mt-[-30px] flex gap-2">
-          {update?.sentAt ? (
-            <Button type="submit">
-              <EnvelopeIcon className="size-4" />
-              Update
-            </Button>
-          ) : (
-            <>
-              <MutationStatusButton
-                type="button"
-                mutation={saveMutation}
-                idleVariant="outline"
-                loadingText="Saving..."
-                onClick={() => form.handleSubmit((values) => saveMutation.mutateAsync({ values, preview: true }))()}
-              >
-                <ArrowTopRightOnSquareIcon className="size-4" />
-                Preview
-              </MutationStatusButton>
+      <form onSubmit={(e) => void submit(e)}>
+        <DashboardHeader
+          title={id ? "Edit company update" : "New company update"}
+          headerActions={
+            update?.sentAt ? (
               <Button type="submit">
                 <EnvelopeIcon className="size-4" />
-                Publish
+                Update
               </Button>
-            </>
-          )}
-        </div>
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_auto]">
+            ) : (
+              <>
+                <MutationStatusButton
+                  type="button"
+                  mutation={saveMutation}
+                  idleVariant="outline"
+                  loadingText="Saving..."
+                  onClick={() =>
+                    void form.handleSubmit((values) => saveMutation.mutateAsync({ values, preview: true }))()
+                  }
+                >
+                  <ArrowTopRightOnSquareIcon className="size-4" />
+                  Preview
+                </MutationStatusButton>
+                <Button type="submit">
+                  <EnvelopeIcon className="size-4" />
+                  Publish
+                </Button>
+              </>
+            )
+          }
+        />
+        <div className="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_auto]">
           <div className="grid gap-3">
             <FormField
               control={form.control}

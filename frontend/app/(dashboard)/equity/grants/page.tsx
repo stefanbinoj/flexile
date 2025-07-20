@@ -1,7 +1,7 @@
 "use client";
 import { CircleAlert, CircleCheck, Info, Pencil } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
 import { linkClasses } from "@/components/Link";
@@ -19,20 +19,25 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { DocumentTemplateType } from "@/db/enums";
-import { useCurrentCompany, useCurrentUser } from "@/global";
+import { useCurrentCompany } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatMoney } from "@/utils/formatMoney";
 import { formatDate } from "@/utils/time";
-import { navLinks } from "@/app/(dashboard)/equity";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 
 type EquityGrant = RouterOutput["equityGrants"]["list"][number];
 export default function GrantsPage() {
   const router = useRouter();
   const company = useCurrentCompany();
-  const user = useCurrentUser();
-  const pathname = usePathname();
   const { data = [], isLoading, refetch } = trpc.equityGrants.list.useQuery({ companyId: company.id });
   const [cancellingGrantId, setCancellingGrantId] = useState<string | null>(null);
   const cancellingGrant = data.find((grant) => grant.id === cancellingGrantId);
@@ -80,27 +85,33 @@ export default function GrantsPage() {
     type: DocumentTemplateType.EquityPlanContract,
     signable: true,
   });
-  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
+  const { currentLink } = useNavLinks();
 
   return (
     <>
-      {!!currentLink && (
-        <DashboardHeader
-          title={"Equity"}
-          showBreadcrumb
-          breadcrumbLinks={{ label: currentLink.label, href: currentLink.route }}
-          headerAction={
-            equityPlanContractTemplates.length > 0 ? (
-              <Button asChild>
-                <Link href={`/companies/${company.id}/administrator/equity_grants/new`}>
-                  <Pencil className="size-4" />
-                  New option grant
-                </Link>
-              </Button>
-            ) : null
-          }
-        />
-      )}
+      <DashboardHeader
+        title={
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>Equity</BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        }
+        headerActions={
+          equityPlanContractTemplates.length > 0 ? (
+            <Button asChild>
+              <Link href={`/companies/${company.id}/administrator/equity_grants/new`}>
+                <Pencil className="size-4" />
+                New option grant
+              </Link>
+            </Button>
+          ) : null
+        }
+      />
 
       {equityPlanContractTemplates.length === 0 ? (
         <Alert>

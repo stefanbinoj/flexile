@@ -3,9 +3,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { isFuture } from "date-fns";
 import { CircleCheck, Info } from "lucide-react";
-import { forbidden, usePathname } from "next/navigation";
+import { forbidden } from "next/navigation";
 import { useState } from "react";
-import { navLinks } from "@/app/(dashboard)/equity";
 import DetailsModal from "@/app/(dashboard)/equity/grants/DetailsModal";
 import ExerciseModal from "@/app/(dashboard)/equity/grants/ExerciseModal";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
@@ -21,6 +20,14 @@ import { pluralize } from "@/utils/pluralize";
 import { request } from "@/utils/request";
 import { resend_company_equity_grant_exercise_path } from "@/utils/routes";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 
 const pluralizeGrants = (number: number) => `${number} ${pluralize("stock option grant", number)}`;
 
@@ -42,7 +49,6 @@ const investorGrantColumns = [
 export default function OptionsPage() {
   const company = useCurrentCompany();
   const user = useCurrentUser();
-  const pathname = usePathname();
   if (!user.roles.investor) forbidden();
   const [data] = trpc.equityGrants.list.useSuspenseQuery({
     companyId: company.id,
@@ -95,17 +101,23 @@ export default function OptionsPage() {
     },
     onSuccess: () => setTimeout(() => resendPaymentInstructions.reset(), 5000),
   });
-  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
+  const { currentLink } = useNavLinks();
 
   return (
     <>
-      {!!currentLink && (
-        <DashboardHeader
-          title={"Equity"}
-          showBreadcrumb
-          breadcrumbLinks={{ label: currentLink.label, href: currentLink.route }}
-        />
-      )}
+      <DashboardHeader
+        title={
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>Equity</BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        }
+      />
       {data.length === 0 ? (
         <Placeholder icon={CircleCheck}>You don't have any option grants right now.</Placeholder>
       ) : (

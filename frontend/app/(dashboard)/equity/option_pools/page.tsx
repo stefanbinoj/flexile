@@ -5,12 +5,18 @@ import DataTable, { createColumnHelper, useTable } from "@/components/DataTable"
 import Placeholder from "@/components/Placeholder";
 import TableSkeleton from "@/components/TableSkeleton";
 import { Progress } from "@/components/ui/progress";
-import { useCurrentCompany, useCurrentUser } from "@/global";
+import { useCurrentCompany } from "@/global";
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
-import { usePathname } from "next/navigation";
-import { navLinks } from "@/app/(dashboard)/equity";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 
 type OptionPool = RouterOutput["optionPools"]["list"][number];
 
@@ -30,22 +36,26 @@ const columns = [
 
 export default function OptionPools() {
   const company = useCurrentCompany();
-  const user = useCurrentUser();
-  const pathname = usePathname();
   const { data = [], isLoading } = trpc.optionPools.list.useQuery({ companyId: company.id });
 
   const table = useTable({ columns, data });
-  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
+  const { currentLink } = useNavLinks();
 
   return (
     <>
-      {!!currentLink && (
-        <DashboardHeader
-          title={"Equity"}
-          showBreadcrumb
-          breadcrumbLinks={{ label: currentLink.label, href: currentLink.route }}
-        />
-      )}
+      <DashboardHeader
+        title={
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>Equity</BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        }
+      />
       {isLoading ? (
         <TableSkeleton columns={5} />
       ) : data.length > 0 ? (

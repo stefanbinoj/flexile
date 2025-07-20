@@ -36,6 +36,7 @@ import {
 } from "@/utils/routes";
 import QuantityInput from "./QuantityInput";
 import { LegacyAddress as Address, useCanSubmitInvoices } from ".";
+import { DashboardHeader } from "@/components/DashboardHeader";
 
 const addressSchema = z.object({
   street_address: z.string(),
@@ -273,26 +274,24 @@ const Edit = () => {
 
   return (
     <>
-      <header className="px-3 py-2 md:px-4 md:py-4">
-        <div className="grid gap-y-8">
-          <div className="grid items-center justify-between gap-3 md:flex">
-            <h1 className="text-sm font-bold">{data.invoice.id ? "Edit invoice" : "New invoice"}</h1>
-            <div className="flex items-center gap-3 print:hidden">
-              {data.invoice.id && data.invoice.status === "rejected" ? (
-                <div className="inline-flex items-center">Action required</div>
-              ) : (
-                <Button variant="outline" asChild>
-                  <Link href="/invoices">Cancel</Link>
-                </Button>
-              )}
-              <Button variant="primary" onClick={() => validate() && submit.mutate()} disabled={submit.isPending}>
-                <PaperAirplaneIcon className="size-4" />
-                {submit.isPending ? "Sending..." : data.invoice.id ? "Re-submit invoice" : "Send invoice"}
+      <DashboardHeader
+        title={data.invoice.id ? "Edit invoice" : "New invoice"}
+        headerActions={
+          <>
+            {data.invoice.id && data.invoice.status === "rejected" ? (
+              <div className="inline-flex items-center">Action required</div>
+            ) : (
+              <Button variant="outline" asChild>
+                <Link href="/invoices">Cancel</Link>
               </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+            )}
+            <Button variant="primary" onClick={() => validate() && submit.mutate()} disabled={submit.isPending}>
+              <PaperAirplaneIcon className="size-4" />
+              {submit.isPending ? "Sending..." : data.invoice.id ? "Re-submit invoice" : "Send invoice"}
+            </Button>
+          </>
+        }
+      />
 
       {payRateInSubunits && lineItems.some((lineItem) => lineItem.pay_rate_in_subunits > payRateInSubunits) ? (
         <Alert variant="warning">

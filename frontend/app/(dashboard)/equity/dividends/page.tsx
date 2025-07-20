@@ -30,15 +30,20 @@ import { formatMoneyFromCents } from "@/utils/formatMoney";
 import { request } from "@/utils/request";
 import { company_dividend_path, sign_company_dividend_path } from "@/utils/routes";
 import { formatDate } from "@/utils/time";
-import { navLinks } from "@/app/(dashboard)/equity";
-import { usePathname } from "next/navigation";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 
 type Dividend = RouterOutput["dividends"]["list"][number];
 const columnHelper = createColumnHelper<Dividend>();
 export default function Dividends() {
   const company = useCurrentCompany();
-  const pathname = usePathname();
   const user = useCurrentUser();
   const [data, { refetch }] = trpc.dividends.list.useSuspenseQuery({
     companyId: company.id,
@@ -118,16 +123,22 @@ export default function Dividends() {
     [],
   );
   const table = useTable({ columns, data });
-  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
+  const { currentLink } = useNavLinks();
   return (
     <>
-      {!!currentLink && (
-        <DashboardHeader
-          title={"Equity"}
-          showBreadcrumb
-          breadcrumbLinks={{ label: currentLink.label, href: currentLink.route }}
-        />
-      )}
+      <DashboardHeader
+        title={
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>Equity</BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        }
+      />
 
       {!user.legalName ? (
         <Alert>

@@ -30,7 +30,7 @@ export default function CompanyUpdates() {
     <>
       <DashboardHeader
         title="Updates"
-        headerAction={
+        headerActions={
           user.roles.administrator ? (
             <Button asChild>
               <Link href="/updates/company/new">New update</Link>

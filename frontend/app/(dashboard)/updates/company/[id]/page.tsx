@@ -21,7 +21,7 @@ function View() {
     <>
       <DashboardHeader
         title={`${update.sentAt ? "" : "Previewing:"} ${update.title}`}
-        headerAction={
+        headerActions={
           !update.sentAt && (
             <MutationButton loadingText="Sending..." mutation={sendTestEmail} param={{ companyId: company.id, id }}>
               <EnvelopeIcon className="size-4" />

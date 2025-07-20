@@ -77,7 +77,7 @@ export default function NewBuyback() {
     <>
       <DashboardHeader
         title="Start new buyback"
-        headerAction={
+        headerActions={
           <Button variant="outline" asChild>
             <Link href="/equity/tender_offers">Cancel</Link>
           </Button>

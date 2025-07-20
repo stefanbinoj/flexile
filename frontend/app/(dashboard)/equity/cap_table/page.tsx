@@ -1,6 +1,6 @@
 "use client";
 import { CircleCheck } from "lucide-react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useMemo } from "react";
 import CopyButton from "@/components/CopyButton";
 import DataTable, { createColumnHelper, useTable } from "@/components/DataTable";
@@ -18,15 +18,21 @@ import {
 import type { RouterOutput } from "@/trpc";
 import { trpc } from "@/trpc/client";
 import { formatOwnershipPercentage } from "@/utils/numbers";
-import { navLinks } from "@/app/(dashboard)/equity";
 import { DashboardHeader } from "@/components/DashboardHeader";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { useNavLinks } from "@/app/(dashboard)/equity/hooks/useNavLinks";
 
 type Data = RouterOutput["capTable"]["show"];
 
 export default function CapTable() {
   const company = useCurrentCompany();
   const searchParams = useSearchParams();
-  const pathname = usePathname();
   const newSchema = searchParams.get("new_schema") !== null;
   const [data] = trpc.capTable.show.useSuspenseQuery({ companyId: company.id, newSchema });
   const user = useCurrentUser();
@@ -159,16 +165,23 @@ export default function CapTable() {
   );
 
   const shareClassesTable = useTable({ data: shareClassesData, columns: shareClassesColumns });
-  const currentLink = navLinks(user, company).find((link) => link.route === pathname);
+  const { currentLink } = useNavLinks();
   return (
     <>
-      {!!currentLink && (
-        <DashboardHeader
-          title={"Equity"}
-          showBreadcrumb
-          breadcrumbLinks={{ label: currentLink.label, href: currentLink.route }}
-        />
-      )}
+      <DashboardHeader
+        title={
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>Equity</BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{currentLink?.label}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        }
+      />
+
       {selectedInvestors.length > 0 && (
         <Alert className="mb-4">
           <AlertDescription className="flex items-center justify-between">

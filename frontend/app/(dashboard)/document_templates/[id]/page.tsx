@@ -149,7 +149,7 @@ export default function EditTemplatePage() {
     <>
       <DashboardHeader
         title={template.companyId !== null ? `${id ? "Edit" : "New"} ${template.name}` : `Default ${template.name}`}
-        headerAction={
+        headerActions={
           <Button variant="outline" asChild>
             <Link href="/documents">
               <ArrowLeftIcon className="size-4" />

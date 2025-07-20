@@ -137,7 +137,7 @@ export default function PeoplePage() {
     <>
       <DashboardHeader
         title="People"
-        headerAction={
+        headerActions={
           workers.length === 0 ? (
             <div className="flex gap-2">
               <Button size="small" variant="outline" onClick={() => setShowInviteLinkModal(true)}>

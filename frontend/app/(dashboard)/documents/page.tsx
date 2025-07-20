@@ -349,7 +349,7 @@ export default function DocumentsPage() {
     <>
       <DashboardHeader
         title="Documents"
-        headerAction={
+        headerActions={
           <>
             {isCompanyRepresentative && documents.length === 0 ? <EditTemplates /> : null}
             {user.roles.administrator && company.flags.includes("lawyers") ? (

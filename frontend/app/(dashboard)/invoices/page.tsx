@@ -337,7 +337,7 @@ export default function InvoicesPage() {
     <>
       <DashboardHeader
         title="Invoices"
-        headerAction={
+        headerActions={
           user.roles.worker ? (
             <Button asChild variant="outline" size="small" disabled={!canSubmitInvoices}>
               <Link href="/invoices/new" inert={!canSubmitInvoices}>
